@@ -35,3 +35,9 @@ def get_base_permissions(guild: dict, member: dict) -> int:
 
     return permissions
 
+
+def get_overwrites(
+    base_permissions:int, guild_id:int, member:dict, channel:dict 
+    ) -> int:
+ 
+    return 0

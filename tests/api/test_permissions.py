@@ -1,5 +1,5 @@
 from api.discord_perm.discord_perm_const import *
-from api.discord_perm.discord_perm import get_base_permissions
+from api.discord_perm.discord_perm import get_base_permissions, get_overwrites
 from django.test import TestCase
 
 
@@ -37,43 +37,50 @@ class TestPermissions(TestCase):
             ],
         }
         cls.members = [
+            {"roles": ["123"], "user": {"id": "1"}},  # everyone
+            {"roles": ["1"], "user": {"id": "1"}},  # admin
+            {"roles": ["3"], "user": {"id": "1"}},  # member
+            {"roles": ["2", "3"], "user": {"id": "1"}},  # member, moderator
+        ]
+        cls.channels = [
             {
-                "roles": ["123"],
-                "user": {
-                    "id": "1"
-                }
+                "id": "123",
+                "permission_overwrites": [
+                    {"id": "123", "allow": "0", "deny": "0"},
+                    {"id": "3", "allow": "3197504", "deny": "2176921600"},
+                    {"id": "2", "allow": "2176921600", "deny": "0"},
+                ],
             },
             {
-                "roles": ["1"],
-                "user": {
-                    "id": "1"
-                }
+                "id": "456",
+                "permission_overwrites": [
+                    {"id": "123", "allow": "0", "deny": "0"},
+                ],
             },
             {
-                "roles": ["3"],
-                "user": {
-                    "id": "1"
-                }
+                "id": "789",
+                "permission_overwrites": [
+                    {"id": "123", "allow": "0", "deny": "3072"},
+                    {"id": "3", "allow": "3072", "deny": "0"},
+                ],
             },
             {
-                "roles": ["2", "3"],
-                "user": {
-                    "id": "1"
-                }
+                "id": "789897393889214561",
+                "permission_overwrites": [],
             },
         ]
 
     def test_get_base_permission(self):
         """This test checks if the base permissions are read as they should"""
 
-        #everyone
+        # everyone
         permission = get_base_permissions(self.guild, self.members[0])
-        # check if those permissions are true
+        # check if those permissions are True
         self.assertTrue(permission & VIEW_CHANNEL == VIEW_CHANNEL)
         self.assertTrue(permission & USE_SLASH_COMMANDS == USE_SLASH_COMMANDS)
         self.assertTrue(
             permission & READ_MESSAGE_HISTORY == READ_MESSAGE_HISTORY)
-        # check if those permissions are false
+        # check if those permissions are False
         self.assertFalse(permission & ADMINISTRATOR == ADMINISTRATOR)
         self.assertFalse(permission & KICK_MEMBERS == KICK_MEMBERS)
         self.assertFalse(permission & BAN_MEMBERS == BAN_MEMBERS)
@@ -95,7 +102,7 @@ class TestPermissions(TestCase):
 
         # member
         permission = get_base_permissions(self.guild, self.members[2])
-        # check if those permissions are true
+        # check if those permissions are True
         self.assertTrue(permission & SEND_MESSAGES == SEND_MESSAGES)
         self.assertTrue(permission & EMBED_LINKS == EMBED_LINKS)
         self.assertTrue(permission & ATTACH_FILES == ATTACH_FILES)
@@ -103,14 +110,13 @@ class TestPermissions(TestCase):
         self.assertTrue(permission & CONNECT == CONNECT)
         self.assertTrue(permission & SPEAK == SPEAK)
         self.assertTrue(permission & STREAM == STREAM)
-        # check if those permissions are false
+        # check if those permissions are False
         self.assertFalse(permission & KICK_MEMBERS == KICK_MEMBERS)
         self.assertFalse(permission & BAN_MEMBERS == BAN_MEMBERS)
         self.assertFalse(permission & MANAGE_MESSAGES == MANAGE_MESSAGES)
         self.assertFalse(permission & MUTE_MEMBERS == MUTE_MEMBERS)
         self.assertFalse(permission & DEAFEN_MEMBERS == DEAFEN_MEMBERS)
         self.assertFalse(permission & MOVE_MEMBERS == MOVE_MEMBERS)
-
 
         # member & moderator
         permission = get_base_permissions(self.guild, self.members[3])
@@ -130,3 +136,45 @@ class TestPermissions(TestCase):
         self.assertTrue(permission & SPEAK == SPEAK)
         self.assertTrue(permission & STREAM == STREAM)
 
+    def test_get_overwrites(self):
+        """This test checks if the permissions overwrites are applied as they
+        should
+        """
+
+        # member
+        permission = get_base_permissions(self.guild, self.members[2])
+        overwrites = get_overwrites(
+            permission, 123, self.members[2], self.channels[0]
+            )
+        # check if those permissions are now True
+        self.assertTrue(overwrites & SEND_MESSAGES == SEND_MESSAGES)
+        self.assertTrue(overwrites & EMBED_LINKS == EMBED_LINKS)
+        self.assertTrue(overwrites & ATTACH_FILES == ATTACH_FILES)
+        self.assertTrue(overwrites & ADD_REACTIONS == ADD_REACTIONS)
+        self.assertTrue(overwrites & CONNECT == CONNECT)
+        self.assertTrue(overwrites & SPEAK == SPEAK)
+        self.assertTrue(overwrites & STREAM == STREAM)
+        # check if those permissions are now False
+        self.assertFalse(overwrites & MANAGE_MESSAGES == MANAGE_MESSAGES)
+        self.assertFalse(
+            overwrites & READ_MESSAGE_HISTORY == READ_MESSAGE_HISTORY)
+        self.assertFalse(overwrites & SEND_TTS_MESSAGES == SEND_TTS_MESSAGES)
+        self.assertFalse(overwrites & USE_SLASH_COMMANDS == USE_SLASH_COMMANDS)
+        self.assertFalse(overwrites & MUTE_MEMBERS == MUTE_MEMBERS)
+        self.assertFalse(overwrites & DEAFEN_MEMBERS == DEAFEN_MEMBERS)
+        self.assertFalse(overwrites & MOVE_MEMBERS == MOVE_MEMBERS)
+
+        # moderator
+        permission = get_base_permissions(self.guild, self.members[3])
+        overwrites = get_overwrites(
+            permission, 123, self.members[3], self.channels[0]
+            )
+        # check if those permissions are now True
+        self.assertTrue(overwrites & MANAGE_MESSAGES == MANAGE_MESSAGES)
+        self.assertTrue(
+            overwrites & READ_MESSAGE_HISTORY == READ_MESSAGE_HISTORY)
+        self.assertTrue(overwrites & SEND_TTS_MESSAGES == SEND_TTS_MESSAGES)
+        self.assertTrue(overwrites & USE_SLASH_COMMANDS == USE_SLASH_COMMANDS)
+        self.assertTrue(overwrites & MUTE_MEMBERS == MUTE_MEMBERS)
+        self.assertTrue(overwrites & DEAFEN_MEMBERS == DEAFEN_MEMBERS)
+        self.assertTrue(overwrites & MOVE_MEMBERS == MOVE_MEMBERS)
