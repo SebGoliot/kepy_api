@@ -12,9 +12,9 @@ def get_base_permissions(guild: dict, member: dict) -> int:
         int: The base permission value for this member based on his roles
     """
 
-    # if the member is the owner -> return administrator permission
+    # if the member is the owner -> return all permissions
     if member['user']['id'] == guild['owner_id']:
-        return ADMINISTRATOR
+        return ALL_PERMISSIONS
 
     permissions = 0
 
@@ -24,15 +24,15 @@ def get_base_permissions(guild: dict, member: dict) -> int:
             permissions = int(guild_role['permissions'])
             break
 
-    # get member base roles permissions
+    # get member roles base permissions
     for member_role in member['roles']:
         for guild_role in guild['roles']:
             if guild_role['id'] == member_role:
                 permissions |= int(guild_role['permissions'])
 
-    # if admin -> return admin
+    # if admin -> return all permissions
     if permissions & ADMINISTRATOR == ADMINISTRATOR:
-        return ADMINISTRATOR
+        return ALL_PERMISSIONS
 
     return permissions
 
@@ -40,15 +40,20 @@ def get_base_permissions(guild: dict, member: dict) -> int:
 def get_overwrites(
     base_permissions:int, guild_id:str, member:dict, channel:dict 
     ) -> int:
+
+    # if the member has administrator rights -> return all permissions
     if base_permissions & ADMINISTRATOR == ADMINISTRATOR:
-        return ADMINISTRATOR
+        return ALL_PERMISSIONS
 
     overwrite_everyone = None
     permissions = base_permissions
+
+    # get the everyone role overwrites
     for channel_perm_overwrites in channel['permission_overwrites']:
         if channel_perm_overwrites['id'] == guild_id:
             overwrite_everyone = channel_perm_overwrites
 
+    # add the everyone overwrites
     if overwrite_everyone != None:
         permissions &= ~int(overwrite_everyone['deny'])
         permissions |= int(overwrite_everyone['allow'])
@@ -56,10 +61,10 @@ def get_overwrites(
     overwrites = channel['permission_overwrites']
     allow, deny = EMPTY_PERMISSION, EMPTY_PERMISSION
 
-    # get member's roles overwrites
-    for role_id in member['roles']:
+    # add the member's roles overwrites
+    for member_role_id in member['roles']:
         for each in overwrites:
-            if each['id'] == role_id:
+            if each['id'] == member_role_id:
                 allow |= int(each['allow'])
                 deny |= int(each['deny'])
 
@@ -71,5 +76,6 @@ def get_overwrites(
         if each['id'] == member['user']['id']:
             permissions &= ~int(each['deny'])
             permissions |= int(each['allow'])
+            break
 
     return permissions

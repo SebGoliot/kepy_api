@@ -37,10 +37,10 @@ class TestPermissions(TestCase):
             ],
         }
         cls.members = [
-            {"roles": ["123"], "user": {"id": "1"}},  # everyone
-            {"roles": ["1"], "user": {"id": "1"}},  # admin
-            {"roles": ["3"], "user": {"id": "1"}},  # member
-            {"roles": ["2", "3"], "user": {"id": "1"}},  # member, moderator
+            {"roles": ["123"], "user": {"id": "10"}},  # everyone
+            {"roles": ["1"], "user": {"id": "11"}},  # admin
+            {"roles": ["3"], "user": {"id": "12"}},  # member
+            {"roles": ["2", "3"], "user": {"id": "13"}},  # member, moderator
         ]
         cls.channels = [
             {
@@ -55,6 +55,7 @@ class TestPermissions(TestCase):
                 "id": "456",
                 "permission_overwrites": [
                     {"id": "123", "allow": "0", "deny": "0"},
+                    {"id": "12", "allow": "2147553280", "deny": "3146240"},
                 ],
             },
             {
@@ -99,6 +100,7 @@ class TestPermissions(TestCase):
         # admin
         permission = get_base_permissions(self.guild, self.members[1])
         self.assertTrue(permission & ADMINISTRATOR == ADMINISTRATOR)
+        self.assertTrue(permission == ALL_PERMISSIONS)
 
         # member
         permission = get_base_permissions(self.guild, self.members[2])
@@ -178,3 +180,19 @@ class TestPermissions(TestCase):
         self.assertTrue(overwrites & MUTE_MEMBERS == MUTE_MEMBERS)
         self.assertTrue(overwrites & DEAFEN_MEMBERS == DEAFEN_MEMBERS)
         self.assertTrue(overwrites & MOVE_MEMBERS == MOVE_MEMBERS)
+
+
+        # member
+        permission = get_base_permissions(self.guild, self.members[2])
+        overwrites = get_overwrites(
+            permission, '123', self.members[2], self.channels[1]
+            )
+        # check if those permissions are now True
+        self.assertTrue(
+            overwrites & READ_MESSAGE_HISTORY == READ_MESSAGE_HISTORY)
+        self.assertTrue(overwrites & SEND_TTS_MESSAGES == SEND_TTS_MESSAGES)
+        self.assertTrue(overwrites & USE_SLASH_COMMANDS == USE_SLASH_COMMANDS)
+        # check if those permissions are now False
+        self.assertFalse(overwrites & CONNECT == CONNECT)
+        self.assertFalse(overwrites & SPEAK == SPEAK)
+        self.assertFalse(overwrites & STREAM == STREAM)
