@@ -144,7 +144,7 @@ class TestPermissions(TestCase):
         # member
         permission = get_base_permissions(self.guild, self.members[2])
         overwrites = get_overwrites(
-            permission, 123, self.members[2], self.channels[0]
+            permission, '123', self.members[2], self.channels[0]
             )
         # check if those permissions are now True
         self.assertTrue(overwrites & SEND_MESSAGES == SEND_MESSAGES)
@@ -167,7 +167,7 @@ class TestPermissions(TestCase):
         # moderator
         permission = get_base_permissions(self.guild, self.members[3])
         overwrites = get_overwrites(
-            permission, 123, self.members[3], self.channels[0]
+            permission, '123', self.members[3], self.channels[0]
             )
         # check if those permissions are now True
         self.assertTrue(overwrites & MANAGE_MESSAGES == MANAGE_MESSAGES)
