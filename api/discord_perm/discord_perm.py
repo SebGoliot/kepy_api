@@ -79,3 +79,10 @@ def get_overwrites(
             break
 
     return permissions
+
+def check_permissions(
+    guild:dict, member:dict, channel:dict, target_permission:int
+    ) -> bool:
+    return get_overwrites(
+        get_base_permissions(guild, member), guild['id'], member, channel
+        ) & target_permission == target_permission
