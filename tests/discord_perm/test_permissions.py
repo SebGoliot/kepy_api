@@ -1,11 +1,11 @@
 from django.test import TestCase
 
-from api.discord_perm.discord_perm import (
+from discord_perm.discord_perm import (
     check_permissions,
     get_base_permissions,
     get_overwrites,
 )
-from api.discord_perm.discord_perm_const import *
+from discord_perm.discord_perm_const import *
 
 
 class TestPermissions(TestCase):
