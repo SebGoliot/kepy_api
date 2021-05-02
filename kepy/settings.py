@@ -12,8 +12,14 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 from os import environ as os_environ
-
+from dotenv import load_dotenv
 import rest_framework
+
+load_dotenv()
+
+API_BASE_URL = os_environ["API_BASE_URL"]
+KEPY_TOKEN = os_environ["KEPY_TOKEN"]
+REDIS = os_environ["REDIS"]
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

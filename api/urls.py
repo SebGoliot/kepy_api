@@ -1,6 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 from api import views
+from api.viewsets import mute
 
 router = routers.DefaultRouter()
 router.register('users', views.UserViewSet)
@@ -8,6 +9,7 @@ router.register('guilds', views.GuildViewSet)
 router.register('members', views.MemberViewSet)
 router.register('messages', views.MessageViewSet)
 router.register('attachments', views.AttachmentViewSet)
+router.register('mutes', mute.MuteViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

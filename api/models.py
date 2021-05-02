@@ -4,6 +4,7 @@ from django.db.models import (
     UniqueConstraint
     )
 from django.db.models.deletion import CASCADE
+from django.db.models.fields import BooleanField
 from django.db.models.fields.related import ForeignKey, ManyToManyField
 
 
@@ -18,6 +19,7 @@ class Guild(Model):
     id = IntegerField(primary_key=True)
     date_created = DateTimeField(auto_now=True)
     prefix = CharField(max_length=8)
+    mute_role_id = IntegerField()
 
 class Member(Model):
     user = ForeignKey(DiscordUser, on_delete=CASCADE)
@@ -53,3 +55,12 @@ class Attachment(Model):
     filename = CharField(max_length=1024, default="")
     content_url = CharField(max_length=1024, default="")
     proxy_url = CharField(max_length=1024, default="")
+
+class Mute(Model):
+    member = ForeignKey(Member, on_delete=CASCADE)
+    author = ForeignKey(DiscordUser, on_delete=CASCADE)
+    duration = IntegerField()
+    eta = DateTimeField()
+    active = BooleanField()
+    revoked = BooleanField()
+    unmute_task_id = CharField(max_length=50)
