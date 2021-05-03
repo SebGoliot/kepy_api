@@ -1,2 +1,6 @@
 django
 djangorestframework
+drf-nested-routers
+python-dotenv
+celery[redis]
+requests
