@@ -57,10 +57,12 @@ class Attachment(Model):
     proxy_url = CharField(max_length=1024, default="")
 
 class Mute(Model):
-    member = ForeignKey(Member, on_delete=CASCADE)
-    author = ForeignKey(DiscordUser, on_delete=CASCADE)
+    guild = ForeignKey(Guild, on_delete=CASCADE)
+    user = ForeignKey(DiscordUser, on_delete=CASCADE, related_name="muted_user")
+    author = ForeignKey(DiscordUser, on_delete=CASCADE, related_name="mute_author")
     duration = IntegerField()
-    eta = DateTimeField()
-    active = BooleanField()
-    revoked = BooleanField()
+    start_time = DateTimeField(auto_now_add=True)
+    active = BooleanField(default=True)
+    revoked = BooleanField(default=False)
     unmute_task_id = CharField(max_length=50)
+    reason = CharField(max_length=2048, default="", blank=True)
