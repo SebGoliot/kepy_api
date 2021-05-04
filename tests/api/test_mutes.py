@@ -1,9 +1,6 @@
-from django.http import request
-from api.views.mute import MuteViewSet
 from django.test import TestCase
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
-from rest_framework.request import Request
 
 from api.models import DiscordUser, Guild, Member, Mute
 
@@ -37,7 +34,7 @@ class TestMutes(TestCase):
         Member.objects.create(
             user=discorduser, guild=guild, joined_at="2001-01-01T01:01:01Z"
         )
-        cls.mute = Mute.objects.create(
+        Mute.objects.create(
             id=42, guild=guild, user=discorduser, author=discorduser, duration=42
         )
 
@@ -64,7 +61,7 @@ class TestMutes(TestCase):
         self.assertNotEqual(content[0]["user"], 999)
 
     def test_mutes_get_id(self):
-        """Testing GET on /users/{user_pk}/mutes/"""
+        """Testing GET on /guilds/{guild_pk}/members/{member_pk}/mutes/{mute_pk}/"""
         self.client.force_login(self.user)
         request = self.client.get("/api/guilds/42/members/123/mutes/42/")
         content = request.json()
@@ -92,3 +89,33 @@ class TestMutes(TestCase):
         self.assertEqual(request.status_code, 200)
         self.assertEqual(content["user"], 123)
         self.assertNotEqual(content["user"], 999)
+
+    def test_mutes_cancel(self):
+        """Testing cancel on /guilds/{guild_pk}/members/{member_pk}/mutes/{mute_pk}/cancel/"""
+        self.client.force_login(self.user)
+
+        mute = Mute.objects.get(pk=42)
+        self.assertEqual(mute.active, True)
+        self.assertEqual(mute.revoked, False)
+
+        request = self.client.put("/api/guilds/42/members/123/mutes/42/cancel/")
+        self.assertEqual(request.status_code, 204)
+
+        mute = Mute.objects.get(pk=42)
+        self.assertEqual(mute.active, False)
+        self.assertEqual(mute.revoked, True)
+
+    def test_user_mutes_cancel(self):
+        """Testing cancel on /users/{user_pk}/mutes/{mute_pk}/cancel/"""
+        self.client.force_login(self.user)
+
+        mute = Mute.objects.get(pk=42)
+        self.assertEqual(mute.active, True)
+        self.assertEqual(mute.revoked, False)
+
+        request = self.client.put("/api/users/123/mutes/42/cancel/")
+        self.assertEqual(request.status_code, 204)
+
+        mute = Mute.objects.get(pk=42)
+        self.assertEqual(mute.active, False)
+        self.assertEqual(mute.revoked, True)
