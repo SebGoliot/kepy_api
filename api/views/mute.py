@@ -61,7 +61,7 @@ class MuteViewSet(viewsets.ModelViewSet):
         if guild_pk:
             mute = Mute.objects.get(guild=guild_pk, user=member_pk, pk=pk)
         else:
-            mute = Mute.objects.get(user=member_pk, pk=pk)
+            return Response(status=403)
 
         revoke(state=None, task_id=mute.unmute_task_id)
         mute.revoked = True
