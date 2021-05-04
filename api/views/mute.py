@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
 from rest_framework import viewsets, serializers
 from rest_framework.response import Response
+from rest_framework.decorators import action
+from celery.worker.control import revoke
 
 from api.models import DiscordUser, Guild, Mute
 from kepy_worker import app
@@ -27,7 +29,7 @@ class MuteViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request, guild_pk=None, member_pk=None):
-
+        """Creates a mute and prepares the unmute task"""
         reason = request.data.get("reason")
         if not reason:
             author = DiscordUser.objects.get(id=request.data["author"])
@@ -47,8 +49,23 @@ class MuteViewSet(viewsets.ModelViewSet):
             eta=datetime.now() + timedelta(seconds=int(request.data["duration"])),
         )
         request.data._mutable = True
-        request.data['guild'] = guild_pk
-        request.data['user'] = member_pk
-        request.data['unmute_task_id'] = unmute_task.id
+        request.data["guild"] = guild_pk
+        request.data["user"] = member_pk
+        request.data["unmute_task_id"] = unmute_task.id
 
         return super().create(request)
+
+    @action(methods=["PUT"], detail=True)
+    def cancel(self, request, guild_pk=None, member_pk=None, pk=None):
+        """Cancels a mute"""
+        if guild_pk:
+            mute = Mute.objects.get(guild=guild_pk, user=member_pk, pk=pk)
+        else:
+            mute = Mute.objects.get(user=member_pk, pk=pk)
+
+        revoke(state=None, task_id=mute.unmute_task_id)
+        mute.revoked = True
+        mute.active = False
+        mute.save()
+
+        return Response(status=204)
