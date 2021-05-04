@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
 
-from api.models import DiscordUser, Guild, Member
+from api.models import DiscordUser, Guild, Member, Mute
 
 
 class TestMembers(TestCase):
@@ -31,6 +31,12 @@ class TestMembers(TestCase):
         )
         Member.objects.create(
             user=discorduser, guild=guild, joined_at="2001-01-01T01:01:01Z"
+        )
+        Mute.objects.create(
+            id=24, guild=guild, user=discorduser, author=discorduser, duration=42
+        )
+        Mute.objects.create(
+            id=42, guild=guild, user=discorduser, author=discorduser, duration=42
         )
 
     def test_members_post(self):
@@ -64,3 +70,24 @@ class TestMembers(TestCase):
         self.assertEqual(request.status_code, 200)
         self.assertEqual(content["user"], 42)
         self.assertNotEqual(content["user"], 123)
+
+    def test_cancel_mutes(self):
+        """Testing cancel on /guilds/{guild_pk}/members/{member_pk}/cancel-mutes/"""
+        self.client.force_login(self.user)
+
+        mute = Mute.objects.get(pk=24)
+        self.assertEqual(mute.active, True)
+        self.assertEqual(mute.revoked, False)
+        mute = Mute.objects.get(pk=42)
+        self.assertEqual(mute.active, True)
+        self.assertEqual(mute.revoked, False)
+
+        request = self.client.put("/api/guilds/42/members/42/cancel-mutes/")
+        self.assertEqual(request.status_code, 204)
+
+        mute = Mute.objects.get(pk=24)
+        self.assertEqual(mute.active, False)
+        self.assertEqual(mute.revoked, True)
+        mute = Mute.objects.get(pk=42)
+        self.assertEqual(mute.active, False)
+        self.assertEqual(mute.revoked, True)

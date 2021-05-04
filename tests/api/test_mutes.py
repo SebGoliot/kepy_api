@@ -106,7 +106,7 @@ class TestMutes(TestCase):
         self.assertEqual(mute.revoked, True)
 
     def test_user_mutes_cancel(self):
-        """Testing cancel on /users/{user_pk}/mutes/{mute_pk}/cancel/"""
+        """Testing 403 when cancel on /users/{user_pk}/mutes/{mute_pk}/cancel/"""
         self.client.force_login(self.user)
 
         mute = Mute.objects.get(pk=42)
@@ -114,8 +114,8 @@ class TestMutes(TestCase):
         self.assertEqual(mute.revoked, False)
 
         request = self.client.put("/api/users/123/mutes/42/cancel/")
-        self.assertEqual(request.status_code, 204)
+        self.assertEqual(request.status_code, 403)
 
         mute = Mute.objects.get(pk=42)
-        self.assertEqual(mute.active, False)
-        self.assertEqual(mute.revoked, True)
+        self.assertEqual(mute.active, True)
+        self.assertEqual(mute.revoked, False)
