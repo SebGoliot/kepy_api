@@ -4,12 +4,10 @@ from rest_framework import serializers
 from api.models import Guild
 
 
-
 class GuildSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guild
-        fields = '__all__'
-
+        fields = "__all__"
 
 
 class GuildViewSet(viewsets.ModelViewSet):
@@ -19,4 +17,3 @@ class GuildViewSet(viewsets.ModelViewSet):
 
     queryset = Guild.objects.all().order_by("-date_created")
     serializer_class = GuildSerializer
-

@@ -1,6 +1,5 @@
 from django.urls import include, path
 
-# from rest_framework import routers
 from api.views.discord_user import DiscordUserViewSet
 from api.views.guild import GuildViewSet
 from api.views.member import MemberViewSet

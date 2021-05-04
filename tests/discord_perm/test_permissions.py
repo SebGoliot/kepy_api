@@ -111,7 +111,6 @@ class TestPermissions(TestCase):
         permission = get_base_permissions(self.guild, self.members[4])
         self.assertTrue(permission & ALL_PERMISSIONS == ALL_PERMISSIONS)
 
-
         # member
         permission = get_base_permissions(self.guild, self.members[2])
         # check if those permissions are True
@@ -218,7 +217,6 @@ class TestPermissions(TestCase):
         )
         permission = get_base_permissions(self.guild, self.members[4])
         self.assertTrue(permission & ALL_PERMISSIONS == ALL_PERMISSIONS)
-
 
     def test_check_permission(self):
         """This test checks if the shortcut function behaves as expected
