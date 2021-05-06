@@ -19,13 +19,7 @@ class TestUsers(TestCase):
         cls.client = APIClient()
         cls.user = User.objects.create(username="testuser")
 
-        cls.discorduser = DiscordUser.objects.create(
-            id=42,
-            username="discord_user",
-            discriminator=1234,
-            avatar_url="http://test.test/test.png",
-            created_at="2001-01-01T01:01:01Z",
-        )
+        cls.discorduser = DiscordUser.objects.create(id=42)
 
     def test_users_post(self):
         """Testing POST on /users/"""

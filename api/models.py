@@ -13,23 +13,18 @@ from django.db.models.fields.related import ForeignKey
 
 class DiscordUser(Model):
     id = IntegerField(primary_key=True)
-    username = CharField(max_length=64)
-    discriminator = SmallIntegerField()
-    avatar_url = CharField(max_length=1024)
-    created_at = DateTimeField()
 
 
 class Guild(Model):
     id = IntegerField(primary_key=True)
-    date_created = DateTimeField(auto_now=True)
-    prefix = CharField(max_length=8)
-    mute_role_id = IntegerField()
+    date_created = DateTimeField()
+    prefix = CharField(max_length=8, default="%")
+    mute_role_id = IntegerField(default=0)
 
 
 class Member(Model):
     user = ForeignKey(DiscordUser, on_delete=CASCADE)
     guild = ForeignKey(Guild, on_delete=CASCADE)
-    joined_at = DateTimeField()
 
     class Meta:
         constraints = [

@@ -1,3 +1,4 @@
+from api.shortcuts import get_snowflake_time
 from django.test import TestCase
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
@@ -20,7 +21,7 @@ class TestGuilds(TestCase):
         cls.user = User.objects.create(username="testuser")
 
         Guild.objects.create(
-            id=42, date_created="2001-01-01T01:01:01Z", prefix="!", mute_role_id=123
+            id=42, date_created=get_snowflake_time(42), prefix="!", mute_role_id=123
         )
 
     def test_guilds_post(self):

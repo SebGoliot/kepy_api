@@ -1,4 +1,4 @@
-from kepy_worker.discord_api_shortcuts import api_put, api_delete
+from kepy.discord_api_shortcuts import api_put, api_delete
 from kepy_worker import app
 
 
@@ -17,6 +17,7 @@ def mute(guild_id: int, user_id: int, mute_role_id: int, reason: str) -> None:
 
     api_route = f"/guilds/{guild_id}/members/{user_id}/roles/{mute_role_id}"
     api_put(api_route, reason)
+    # TODO: handle request errors (404, etc..)
 
 
 @app.task
@@ -32,3 +33,4 @@ def unmute(guild_id: int, user_id: int, mute_role_id: int, reason: str) -> None:
 
     api_route = f"/guilds/{guild_id}/members/{user_id}/roles/{mute_role_id}"
     api_delete(api_route, reason)
+    # TODO: handle request errors (404, etc..)

@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 from os import environ as os_environ
 from dotenv import load_dotenv
-import rest_framework
 
 load_dotenv()
 

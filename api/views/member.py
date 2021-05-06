@@ -6,6 +6,7 @@ from celery.worker.control import revoke
 
 from api.models import Member, Mute
 from api.views.mute import MuteViewSet
+from api.shortcuts import get_member_by_id
 
 
 class MemberSerializer(serializers.ModelSerializer):
@@ -21,17 +22,15 @@ class MemberViewSet(viewsets.ModelViewSet):
     serializer_class = MemberSerializer
 
     def retrieve(self, request, guild_pk=None, pk=None):
-        member = Member.objects.get(guild=guild_pk, user=pk)
-        serializer = MemberSerializer(member)
-        return Response(serializer.data)
+        if member := get_member_by_id(guild_pk, pk):
+            serializer = MemberSerializer(member)
+            return Response(serializer.data)
+        return Response(status=404)
 
     @action(methods=["PUT"], detail=True, url_path="cancel-mutes")
     def cancel_mutes(self, request, guild_pk=None, pk=None):
         """Cancels a mute"""
-
         mutes = Mute.objects.filter(guild=guild_pk, user=pk)
-
         for mute in mutes:
             MuteViewSet.cancel_mute(mute)
-
         return Response(status=204)

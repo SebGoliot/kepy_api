@@ -1,3 +1,4 @@
+from api.shortcuts import get_snowflake_time
 from django.test import TestCase
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
@@ -22,18 +23,10 @@ class TestMutes(TestCase):
         cls.user = User.objects.create(username="testuser")
 
         guild = Guild.objects.create(
-            id=42, date_created="2001-01-01T01:01:01Z", prefix="!", mute_role_id=123
+            id=42, date_created=get_snowflake_time(42), prefix="!", mute_role_id=123
         )
-        discorduser = DiscordUser.objects.create(
-            id=123,
-            username="discord_user",
-            discriminator=1234,
-            avatar_url="http://test.test/test.png",
-            created_at="2001-01-01T01:01:01Z",
-        )
-        Member.objects.create(
-            user=discorduser, guild=guild, joined_at="2001-01-01T01:01:01Z"
-        )
+        discorduser = DiscordUser.objects.create(id=123)
+        Member.objects.create(user=discorduser, guild=guild)
         Mute.objects.create(
             id=42, guild=guild, user=discorduser, author=discorduser, duration=42
         )

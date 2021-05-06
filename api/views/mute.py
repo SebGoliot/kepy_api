@@ -4,7 +4,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from celery.worker.control import revoke
 
-from api.models import DiscordUser, Guild, Mute
+from api.shortcuts import get_guild_by_id, get_user_by_id
+from api.models import Mute
 from kepy_worker import app
 
 
@@ -21,10 +22,14 @@ class MuteViewSet(viewsets.ModelViewSet):
     serializer_class = MuteSerializer
 
     def retrieve(self, request, guild_pk=None, member_pk=None, pk=None):
-        if guild_pk:
-            mute = Mute.objects.get(guild=guild_pk, user=member_pk, pk=pk)
-        else:
-            mute = Mute.objects.get(user=member_pk, pk=pk)
+        try:
+            if guild_pk:
+                mute = Mute.objects.get(guild=guild_pk, user=member_pk, pk=pk)
+            else:
+                mute = Mute.objects.get(user=member_pk, pk=pk)
+        except Mute.DoesNotExist:
+            return Response(404)
+
         serializer = MuteSerializer(mute)
         return Response(serializer.data)
 
@@ -32,10 +37,10 @@ class MuteViewSet(viewsets.ModelViewSet):
         """Creates a mute and prepares the unmute task"""
         reason = request.data.get("reason")
         if not reason:
-            author = DiscordUser.objects.get(id=request.data["author"])
+            author = get_user_by_id(request.data["author"])
             reason = request.data.get("reason", f"muted by {author}")
 
-        guild = Guild.objects.get(pk=guild_pk)
+        guild = get_guild_by_id(guild_pk)
         task_args = (
             guild_pk,
             member_pk,

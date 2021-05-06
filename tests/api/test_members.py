@@ -22,16 +22,8 @@ class TestMembers(TestCase):
         guild = Guild.objects.create(
             id=42, date_created="2001-01-01T01:01:01Z", prefix="!", mute_role_id=123
         )
-        discorduser = DiscordUser.objects.create(
-            id=42,
-            username="discord_user",
-            discriminator=1234,
-            avatar_url="http://test.test/test.png",
-            created_at="2001-01-01T01:01:01Z",
-        )
-        Member.objects.create(
-            user=discorduser, guild=guild, joined_at="2001-01-01T01:01:01Z"
-        )
+        discorduser = DiscordUser.objects.create(id=42)
+        Member.objects.create(user=discorduser, guild=guild)
         Mute.objects.create(
             id=24, guild=guild, user=discorduser, author=discorduser, duration=42
         )
@@ -47,7 +39,7 @@ class TestMembers(TestCase):
         )
         request = self.client.post(
             "/api/guilds/42/members/",
-            {"user": 42, "guild": 123, "joined_at": "2001-01-01T01:01:01Z"},
+            {"user": 42, "guild": 123},
         )
         self.assertEqual(request.status_code, 201)
 
