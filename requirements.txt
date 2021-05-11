@@ -1,6 +1,7 @@
 django
 djangorestframework
 drf-nested-routers
+django-cors-headers
 python-dotenv
 celery[redis]
 requests

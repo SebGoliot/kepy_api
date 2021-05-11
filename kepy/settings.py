@@ -20,6 +20,10 @@ API_BASE_URL = os_environ["API_BASE_URL"]
 KEPY_TOKEN = os_environ["KEPY_TOKEN"]
 REDIS = os_environ["REDIS"]
 
+CLIENT_ID = os_environ["CLIENT_ID"]
+CLIENT_SECRET = os_environ["CLIENT_SECRET"]
+AUTH_REDIRECT_URL = os_environ["AUTH_REDIRECT_URL"]
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -46,10 +50,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "corsheaders",
     "api",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",

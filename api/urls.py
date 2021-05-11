@@ -1,6 +1,7 @@
 from django.urls import include, path
 
 from api.views.discord_user import DiscordUserViewSet
+from api.views.discord_login import discord_login
 from api.views.guild import GuildViewSet
 from api.views.member import MemberViewSet
 from api.views.message import MessageViewSet
@@ -40,13 +41,10 @@ members_router.register("mutes", MuteViewSet, basename="member-mutes")
 # /guilds/{guild_pk}/members/{member_pk}/mutes/{mute_pk}
 
 
-# router.register('messages', views.MessageViewSet)
-# router.register('attachments', views.AttachmentViewSet)
-
-
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    path("login/", discord_login, name="discord_login"),
     path("", include(router.urls)),
     path("", include(users_router.urls)),
     path("", include(guilds_router.urls)),
