@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
 
+from api.shortcuts import get_snowflake_time
 from api.models import DiscordUser, Guild, Member, Mute
 
 
@@ -20,7 +21,7 @@ class TestMembers(TestCase):
         cls.user = User.objects.create(username="testuser")
 
         guild = Guild.objects.create(
-            id=42, date_created="2001-01-01T01:01:01Z", prefix="!", mute_role_id=123
+            id=42, date_created=get_snowflake_time(42), prefix="!", mute_role_id=123
         )
         discorduser = DiscordUser.objects.create(id=42)
         Member.objects.create(user=discorduser, guild=guild)
@@ -35,7 +36,7 @@ class TestMembers(TestCase):
         """Testing POST on /guilds/{guild_pk}/members/"""
         self.client.force_login(self.user)
         Guild.objects.create(
-            id=123, date_created="2001-01-01T01:01:01Z", prefix="!", mute_role_id=123
+            id=123, date_created=get_snowflake_time(123), prefix="!", mute_role_id=123
         )
         request = self.client.post(
             "/api/guilds/42/members/",
