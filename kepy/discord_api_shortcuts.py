@@ -2,10 +2,12 @@ import requests
 from kepy.settings import API_BASE_URL, KEPY_TOKEN
 
 
-def api_get(api_route: str) -> "dict | None":
+def api_get(api_route: str, auth: str = None) -> "dict | None":
+    if not auth:
+        auth = f"Bot {KEPY_TOKEN}"
     r = requests.put(
         url=f"{API_BASE_URL}{api_route}",
-        headers={"Authorization": f"Bot {KEPY_TOKEN}"},
+        headers={"Authorization": auth},
     )
     if r.status_code == 200:
         return r.json()
