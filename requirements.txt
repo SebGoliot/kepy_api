@@ -8,3 +8,4 @@ requests
 sentry-sdk
 psycopg2 >= 2.8.*           ; platform_system=='Windows'
 psycopg2-binary  >= 2.8.*   ; platform_system=='Linux'
+gunicorn
