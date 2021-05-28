@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+
+  db:
+    container_name: kepy_db
+    image: postgres:latest
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      
+  redis:
+    container_name: kepy_redis
+    image: redis:alpine
+    restart: always
+    volumes:
+      - "redis:/data"
+
+  api: &api
+    container_name: kepy_api
+    build: .
+    image: kepy_api
+    command: python3 manage.py runserver 5000
+    restart: always
+    expose:
+      - "5000"
+    env_file:
+      .env
+    depends_on:
+      - db
+    volumes: 
+      - .:/app
+
+  celery:
+    <<: *api
+    container_name: kepy_celery
+    image: kepy_api
+    command: celery -A run_worker worker -l INFO
+    restart: always
+
+volumes:
+  pgdata:
+  redis:
