@@ -1,12 +1,12 @@
 import requests
-from kepy.settings import API_BASE_URL, KEPY_TOKEN
+from kepy.settings.base import DISCORD_API, KEPY_TOKEN
 
 
 def api_get(api_route: str, auth: str = None) -> "dict | None":
     if not auth:
         auth = f"Bot {KEPY_TOKEN}"
     r = requests.put(
-        url=f"{API_BASE_URL}{api_route}",
+        url=f"{DISCORD_API}{api_route}",
         headers={"Authorization": auth},
     )
     if r.status_code == 200:
@@ -17,14 +17,14 @@ def api_get(api_route: str, auth: str = None) -> "dict | None":
 
 def api_put(api_route: str, reason: str = ""):
     return requests.put(
-        url=f"{API_BASE_URL}{api_route}",
+        url=f"{DISCORD_API}{api_route}",
         headers={"Authorization": f"Bot {KEPY_TOKEN}", "X-Audit-Log-Reason": reason},
     )
 
 
 def api_delete(api_route: str, reason: str = ""):
     return requests.delete(
-        url=f"{API_BASE_URL}{api_route}",
+        url=f"{DISCORD_API}{api_route}",
         headers={"Authorization": f"Bot {KEPY_TOKEN}", "X-Audit-Log-Reason": reason},
     )
 

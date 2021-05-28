@@ -8,9 +8,16 @@ https://docs.djangoproject.com/en/3.2/howto/deployment/wsgi/
 """
 
 import os
+import dotenv
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'kepy.settings')
+dotenv.load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env"))
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kepy.settings.development")
+
+if settings := os.getenv("DJANGO_SETTINGS_MODULE"):
+    os.environ["DJANGO_SETTINGS_MODULE"] = settings
+
 
 application = get_wsgi_application()

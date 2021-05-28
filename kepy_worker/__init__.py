@@ -1,5 +1,5 @@
 from celery import Celery
-from kepy.settings import REDIS
+from kepy.settings.base import REDIS
 
 app = Celery('tasks', broker=REDIS, backend=REDIS)
 

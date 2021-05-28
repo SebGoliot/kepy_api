@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 
 
-from kepy.settings import CLIENT_ID, CLIENT_SECRET, AUTH_REDIRECT_URL, API_BASE_URL
+from kepy.settings.base import CLIENT_ID, CLIENT_SECRET, AUTH_REDIRECT_URL, DISCORD_API
 
 
 def exchange_code(code):
