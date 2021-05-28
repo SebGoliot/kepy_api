@@ -10,6 +10,11 @@ services:
       - .env
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: "pg_isready -U postgres"
+      interval: 15s
+      timeout: 5s
+      retries: 5
       
   redis:
     container_name: kepy_redis
@@ -22,14 +27,17 @@ services:
     container_name: kepy_api
     build: .
     image: kepy_api
-    command: python3 manage.py runserver 5000
+    command: sh -c "
+      python3 manage.py migrate &&
+      python3 manage.py runserver 5000"
     restart: always
     expose:
       - "5000"
     env_file:
       .env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes: 
       - .:/app
 
