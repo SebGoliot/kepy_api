@@ -38,7 +38,7 @@ DATABASES = {
         "NAME": POSTGRES_DB,
         "USER": POSTGRES_USER,
         "PASSWORD": POSTGRES_PASSWORD,
-        "HOST": "127.0.0.1",
+        "HOST": "db",
         "PORT": 5432,
     }
 }
