@@ -1,4 +1,4 @@
-version: "3.7"
+version: "2.1"
 
 services:
 
@@ -8,10 +8,12 @@ services:
     restart: always
     env_file:
       - .env
+    networks:
+      - traefik
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: "pg_isready -U postgres"
+      test: "pg_isready -U $POSTGRES_USER"
       interval: 15s
       timeout: 5s
       retries: 5
@@ -20,13 +22,18 @@ services:
     container_name: kepy_redis
     image: redis:alpine
     restart: always
+    networks:
+      - traefik
     volumes:
       - "redis:/data"
 
-  api: &api
-    container_name: kepy_api
+  kepy_base_api:
     build: .
-    image: kepy_api
+    image: kepy_base_api
+
+  api:
+    container_name: kepy_api
+    image: kepy_base_api
     command: sh -c "
       python3 manage.py migrate &&
       gunicorn kepy.wsgi -w 4 -b :5000"
@@ -35,18 +42,36 @@ services:
       - "5000"
     env_file:
       .env
+    networks:
+      - traefik
+    volumes: 
+      - .:/app
     depends_on:
       db:
         condition: service_healthy
-    volumes: 
-      - .:/app
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.kepy_api.tls=true
+      - traefik.http.routers.kepy_api.tls.certresolver=le
+      - traefik.http.routers.kepy_api.entrypoints=websecure
+      - traefik.http.routers.kepy_api.rule=Host(`$KEPY_API_HOST`)
 
   celery:
-    <<: *api
     container_name: kepy_celery
-    image: kepy_api
+    image: kepy_base_api
     command: celery -A run_worker worker -l INFO
     restart: always
+    networks:
+      - traefik
+    volumes: 
+      - .:/app
+    depends_on:
+      - redis
+
+networks:
+  traefik:
+    external:
+      name: traefik_proxy
 
 volumes:
   pgdata:
