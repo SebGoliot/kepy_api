@@ -39,7 +39,7 @@ class TestMembers(TestCase):
             id=123, date_created=get_snowflake_time(123), prefix="!", mute_role_id=123
         )
         request = self.client.post(
-            "/api/guilds/42/members/",
+            "/guilds/42/members/",
             {"user": 42, "guild": 123},
         )
         self.assertEqual(request.status_code, 201)
@@ -47,7 +47,7 @@ class TestMembers(TestCase):
     def test_members_get(self):
         """Testing GET on /guilds/{guild_pk}/members/"""
         self.client.force_login(self.user)
-        request = self.client.get("/api/guilds/42/members/")
+        request = self.client.get("/guilds/42/members/")
         content = request.json()
 
         self.assertEqual(request.status_code, 200)
@@ -57,7 +57,7 @@ class TestMembers(TestCase):
     def test_members_get_id(self):
         """Testing GET on /guilds/{pk}/members/{member_pk}/"""
         self.client.force_login(self.user)
-        request = self.client.get("/api/guilds/42/members/42/")
+        request = self.client.get("/guilds/42/members/42/")
         content = request.json()
 
         self.assertEqual(request.status_code, 200)
@@ -75,7 +75,7 @@ class TestMembers(TestCase):
         self.assertEqual(mute.active, True)
         self.assertEqual(mute.revoked, False)
 
-        request = self.client.put("/api/guilds/42/members/42/cancel-mutes/")
+        request = self.client.put("/guilds/42/members/42/cancel-mutes/")
         self.assertEqual(request.status_code, 204)
 
         mute = Mute.objects.get(pk=24)

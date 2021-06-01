@@ -25,7 +25,7 @@ class TestUsers(TestCase):
         """Testing POST on /users/"""
         self.client.force_login(self.user)
         request = self.client.post(
-            "/api/users/",
+            "/users/",
             {
                 "id": 123,
                 "username": "user",
@@ -39,7 +39,7 @@ class TestUsers(TestCase):
     def test_users_get(self):
         """Testing GET on /users/"""
         self.client.force_login(self.user)
-        request = self.client.get("/api/users/")
+        request = self.client.get("/users/")
         content = request.json()
 
         self.assertEqual(request.status_code, 200)
@@ -49,7 +49,7 @@ class TestUsers(TestCase):
     def test_users_get_id(self):
         """Testing GET on /users/{pk}"""
         self.client.force_login(self.user)
-        request = self.client.get("/api/users/42/")
+        request = self.client.get("/users/42/")
         content = request.json()
 
         self.assertEqual(request.status_code, 200)

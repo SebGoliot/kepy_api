@@ -28,7 +28,7 @@ class TestGuilds(TestCase):
         """Testing POST on /guilds/"""
         self.client.force_login(self.user)
         request = self.client.post(
-            "/api/guilds/",
+            "/guilds/",
             {
                 "id": 123,
                 "date_created": "2001-01-01T01:01:01Z",
@@ -41,7 +41,7 @@ class TestGuilds(TestCase):
     def test_guilds_get(self):
         """Testing GET on /guilds/"""
         self.client.force_login(self.user)
-        request = self.client.get("/api/guilds/")
+        request = self.client.get("/guilds/")
         content = request.json()
 
         self.assertEqual(request.status_code, 200)
@@ -51,7 +51,7 @@ class TestGuilds(TestCase):
     def test_guilds_get_id(self):
         """Testing GET on /guilds/{pk}/"""
         self.client.force_login(self.user)
-        request = self.client.get("/api/guilds/42/")
+        request = self.client.get("/guilds/42/")
         content = request.json()
 
         self.assertEqual(request.status_code, 200)

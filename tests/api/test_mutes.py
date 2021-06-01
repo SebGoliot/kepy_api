@@ -35,7 +35,7 @@ class TestMutes(TestCase):
         """Testing POST on /guilds/{guild_pk}/members/{member_pk}/mutes/"""
         self.client.force_login(self.user)
         request = self.client.post(
-            "/api/guilds/42/members/123/mutes/",
+            "/guilds/42/members/123/mutes/",
             {"author": 123, "duration": 42},
         )
         content = request.json()
@@ -46,7 +46,7 @@ class TestMutes(TestCase):
     def test_mutes_get(self):
         """Testing GET on /guilds/{guild_pk}/members/{member_pk}/mutes/"""
         self.client.force_login(self.user)
-        request = self.client.get("/api/guilds/42/members/123/mutes/")
+        request = self.client.get("/guilds/42/members/123/mutes/")
         content = request.json()
 
         self.assertEqual(request.status_code, 200)
@@ -56,7 +56,7 @@ class TestMutes(TestCase):
     def test_mutes_get_id(self):
         """Testing GET on /guilds/{guild_pk}/members/{member_pk}/mutes/{mute_pk}/"""
         self.client.force_login(self.user)
-        request = self.client.get("/api/guilds/42/members/123/mutes/42/")
+        request = self.client.get("/guilds/42/members/123/mutes/42/")
         content = request.json()
 
         self.assertEqual(request.status_code, 200)
@@ -66,7 +66,7 @@ class TestMutes(TestCase):
     def test_user_mutes_get(self):
         """Testing GET on /users/{user_pk}/mutes/"""
         self.client.force_login(self.user)
-        request = self.client.get("/api/users/123/mutes/")
+        request = self.client.get("/users/123/mutes/")
         content = request.json()
 
         self.assertEqual(request.status_code, 200)
@@ -76,7 +76,7 @@ class TestMutes(TestCase):
     def test_user_mutes_get_id(self):
         """Testing GET on /users/{user_pk}/mutes/{mute_pk}/"""
         self.client.force_login(self.user)
-        request = self.client.get("/api/users/123/mutes/42/")
+        request = self.client.get("/users/123/mutes/42/")
         content = request.json()
 
         self.assertEqual(request.status_code, 200)
@@ -91,7 +91,7 @@ class TestMutes(TestCase):
         self.assertEqual(mute.active, True)
         self.assertEqual(mute.revoked, False)
 
-        request = self.client.put("/api/guilds/42/members/123/mutes/42/cancel/")
+        request = self.client.put("/guilds/42/members/123/mutes/42/cancel/")
         self.assertEqual(request.status_code, 204)
 
         mute = Mute.objects.get(pk=42)
@@ -106,7 +106,7 @@ class TestMutes(TestCase):
         self.assertEqual(mute.active, True)
         self.assertEqual(mute.revoked, False)
 
-        request = self.client.put("/api/users/123/mutes/42/cancel/")
+        request = self.client.put("/users/123/mutes/42/cancel/")
         self.assertEqual(request.status_code, 403)
 
         mute = Mute.objects.get(pk=42)
