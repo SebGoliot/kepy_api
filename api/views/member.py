@@ -2,10 +2,9 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework.decorators import action
-from celery.worker.control import revoke
 
-from api.models import Member, Mute
-from api.views.mute import MuteViewSet
+from api.models import Member
+from api.helpers.mute import cancel_member_mutes
 from api.shortcuts import get_member_by_id
 
 
@@ -27,10 +26,8 @@ class MemberViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         return Response(status=404)
 
-    @action(methods=["PUT"], detail=True, url_path="cancel-mutes")
+    @action(methods=["GET"], detail=True, url_path="cancel-mutes")
     def cancel_mutes(self, request, guild_pk=None, pk=None):
         """Cancels a mute"""
-        mutes = Mute.objects.filter(guild=guild_pk, user=pk)
-        for mute in mutes:
-            MuteViewSet.cancel_mute(mute)
+        cancel_member_mutes(guild_pk, pk)
         return Response(status=204)

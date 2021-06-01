@@ -1,3 +1,4 @@
+from api.helpers.mute import end_member_mutes
 from kepy.discord_api_shortcuts import api_put, api_delete
 from kepy_worker import app
 
@@ -30,6 +31,8 @@ def unmute(guild_id: int, user_id: int, mute_role_id: int, reason: str) -> None:
         mute_role_id (int): the id of the mute role
         reason (str): the reason of the unmute
     """
+
+    end_member_mutes(guild_id, user_id)
 
     api_route = f"/guilds/{guild_id}/members/{user_id}/roles/{mute_role_id}"
     api_delete(api_route, reason)

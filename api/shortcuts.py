@@ -1,6 +1,5 @@
 from datetime import datetime, timezone
 
-from kepy.discord_api_shortcuts import get_member_from_api, get_user_from_api
 from api.models import DiscordUser, Guild, Member
 
 

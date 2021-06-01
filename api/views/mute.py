@@ -7,6 +7,7 @@ from celery.worker.control import revoke
 from api.shortcuts import get_guild_by_id, get_user_by_id
 from api.models import Mute
 from kepy_worker import app
+from api.helpers.mute import cancel_mute
 
 
 class MuteSerializer(serializers.ModelSerializer):
@@ -53,7 +54,7 @@ class MuteViewSet(viewsets.ModelViewSet):
             task_args,
             eta=datetime.now() + timedelta(seconds=int(request.data["duration"])),
         )
-        request.data._mutable = True
+        # request.data._mutable = True
         request.data["guild"] = guild_pk
         request.data["user"] = member_pk
         request.data["unmute_task_id"] = unmute_task.id
@@ -67,17 +68,5 @@ class MuteViewSet(viewsets.ModelViewSet):
             mute = Mute.objects.get(guild=guild_pk, user=member_pk, pk=pk)
         else:
             return Response(status=403)
-        self.cancel_mute(mute)
+        cancel_mute(mute)
         return Response(status=204)
-
-    @staticmethod
-    def cancel_mute(mute):
-        """Cancels a mute
-
-        Args:
-            mute (Mute): The Mute object to cancel
-        """
-        revoke(state=None, task_id=mute.unmute_task_id)
-        mute.revoked = True
-        mute.active = False
-        mute.save()
