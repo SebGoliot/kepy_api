@@ -5,7 +5,7 @@ from kepy.settings.base import DISCORD_API, KEPY_TOKEN
 def api_get(api_route: str, auth: str = None) -> "dict | None":
     if not auth:
         auth = f"Bot {KEPY_TOKEN}"
-    r = requests.put(
+    r = requests.get(
         url=f"{DISCORD_API}{api_route}",
         headers={"Authorization": auth},
     )

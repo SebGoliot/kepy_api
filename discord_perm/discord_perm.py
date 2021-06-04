@@ -92,3 +92,7 @@ def check_permissions(
         & target_permission
         == target_permission
     )
+
+
+def has_permission(member_permission: int, target_permission: int) -> bool:
+    return member_permission & target_permission == target_permission

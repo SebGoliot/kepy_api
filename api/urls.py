@@ -1,7 +1,8 @@
+from api.views.discord import get_user_guilds
 from django.urls import include, path
 
 from api.views.discord_user import DiscordUserViewSet
-from api.views.discord_login import discord_login
+from api.views.discord import discord_login
 from api.views.guild import GuildViewSet
 from api.views.member import MemberViewSet
 from api.views.message import MessageViewSet
@@ -22,9 +23,13 @@ users_router.register("mutes", MuteViewSet, basename="user-mutes")
 # /users/{user_pk}/mutes
 # /users/{user_pk}/mutes/{mute_pk}
 
-users_router.register("messages", MuteViewSet, basename="user-messages")
+users_router.register("messages", MessageViewSet, basename="user-messages")
 # /users/{user_pk}/messages
 # /users/{user_pk}/messages/{message_pk}
+
+users_router.register("guilds", GuildViewSet, basename="user-guilds")
+# /users/{user_pk}/guilds
+# /users/{user_pk}/guilds/{guild_pk}
 
 guilds_router = routers.NestedSimpleRouter(router, "guilds", lookup="guild")
 guilds_router.register("members", MemberViewSet, basename="guild-members")
@@ -45,6 +50,7 @@ members_router.register("mutes", MuteViewSet, basename="member-mutes")
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path("login/", discord_login, name="discord_login"),
+    path("user-guilds/", get_user_guilds, name="get_user_guilds"),
     path("", include(router.urls)),
     path("", include(users_router.urls)),
     path("", include(guilds_router.urls)),
