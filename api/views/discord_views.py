@@ -28,8 +28,12 @@ def exchange_code(code):
 @permission_classes([AllowAny])
 def discord_login(request):
     code = request.data.get("code")
+    tokens = exchange_code(code)
+
+    # return user token instead of discord tokens 
+
     return HttpResponse(
-        exchange_code(code), content_type="application/json", status=200
+        tokens, content_type="application/json", status=200
     )
 
 

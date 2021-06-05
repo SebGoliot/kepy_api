@@ -48,9 +48,9 @@ class MuteViewSet(viewsets.ModelViewSet):
             guild.mute_role_id,
             reason,
         )
-        app.send_task("kepy_worker.mute_worker.mute", task_args)
+        app.send_task("kepy_worker.mute_tasks.tasks.mute", task_args)
         unmute_task = app.send_task(
-            "kepy_worker.mute_worker.unmute",
+            "kepy_worker.mute_tasks.tasks.unmute",
             task_args,
             eta=datetime.now() + timedelta(seconds=int(request.data["duration"])),
         )

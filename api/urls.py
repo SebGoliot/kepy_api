@@ -1,13 +1,12 @@
-from api.views.discord import get_user_guilds
+from rest_framework_nested import routers
 from django.urls import include, path
 
-from api.views.discord_user import DiscordUserViewSet
-from api.views.discord import discord_login
-from api.views.guild import GuildViewSet
-from api.views.member import MemberViewSet
-from api.views.message import MessageViewSet
-from api.views.mute import MuteViewSet
-from rest_framework_nested import routers
+from api.viewsets.discord_user import DiscordUserViewSet
+from api.viewsets.guild import GuildViewSet
+from api.viewsets.member import MemberViewSet
+from api.viewsets.message import MessageViewSet
+from api.viewsets.mute import MuteViewSet
+from api.views.discord_views import get_user_guilds, discord_login
 
 router = routers.DefaultRouter()
 
