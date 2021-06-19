@@ -6,6 +6,6 @@ python-dotenv
 celery[redis]
 requests
 sentry-sdk
-psycopg2 >= 2.8.*           ; platform_system=='Windows'
-psycopg2-binary  >= 2.8.*   ; platform_system=='Linux'
+psycopg2                    ; platform_system=='Windows'
+psycopg2-binary             ; platform_system=='Linux'
 gunicorn
