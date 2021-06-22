@@ -20,7 +20,7 @@ sentry_sdk.init(
 )
 
 ALLOWED_HOSTS = [getenv("KEPY_API_HOST")]
-SECURE_SSL_REDIRECT = True
+# SECURE_SSL_REDIRECT = True    # Avoid infinite 301 / HTTPS handled by traefik
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_BROWSER_XSS_FILTER = True
