@@ -29,12 +29,7 @@ def exchange_code(code):
 def discord_login(request):
     code = request.data.get("code")
     tokens = exchange_code(code)
-
-    # return user token instead of discord tokens 
-
-    return HttpResponse(
-        tokens, content_type="application/json", status=200
-    )
+    return HttpResponse(tokens, content_type="application/json", status=200)
 
 
 @api_view(["GET"])

@@ -4,6 +4,7 @@ from discord_perm.discord_perm import (
     check_permissions,
     get_base_permissions,
     get_overwrites,
+    has_permission,
 )
 from discord_perm.discord_perm_const import *
 
@@ -358,3 +359,12 @@ class TestPermissions(TestCase):
         self.assertFalse(
             check_permissions(self.guild, self.members[2], self.channels[1], STREAM)
         )
+
+
+    def test_has_permission(self):
+        """This test checks if the shortcut function behaves as expected
+        Basically checking if the & operator works..
+        """
+
+        self.assertTrue(has_permission(3, 1))   # 00000011 & 00000001
+        self.assertTrue(has_permission(3, 2))   # 00000011 & 00000010

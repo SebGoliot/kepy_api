@@ -21,13 +21,29 @@ class MemberViewSet(viewsets.ModelViewSet):
     serializer_class = MemberSerializer
 
     def retrieve(self, request, guild_pk=None, pk=None):
-        if member := get_member_by_id(guild_pk, pk):
-            serializer = MemberSerializer(member)
-            return Response(serializer.data)
-        return Response(status=404)
+        """Returns a member, creates it if not found
 
-    @action(methods=["GET"], detail=True, url_path="cancel-mutes")
+        Args:
+            guild_pk (int, optional): The guild ID of the member. Defaults to None.
+            pk (int, optional): The member ID. Defaults to None.
+
+        Returns:
+            Response: The response containing the member data.
+        """
+        member = get_member_by_id(guild_pk, pk)
+        serializer = MemberSerializer(member)
+        return Response(serializer.data)
+
+    @action(methods=["PUT"], detail=True, url_path="cancel-mutes")
     def cancel_mutes(self, request, guild_pk=None, pk=None):
-        """Cancels a mute"""
+        """Cancels a member mute
+
+        Args:
+            guild_pk (int, optional): The guild ID of the member. Defaults to None.
+            pk (int, optional): The member ID. Defaults to None.
+
+        Returns:
+            Response: The request response
+        """
         cancel_member_mutes(guild_pk, pk)
         return Response(status=204)

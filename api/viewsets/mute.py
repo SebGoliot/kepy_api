@@ -54,7 +54,7 @@ class MuteViewSet(viewsets.ModelViewSet):
             task_args,
             eta=datetime.now() + timedelta(seconds=int(request.data["duration"])),
         )
-        # request.data._mutable = True
+        request.data._mutable = True
         request.data["guild"] = guild_pk
         request.data["user"] = member_pk
         request.data["unmute_task_id"] = unmute_task.id

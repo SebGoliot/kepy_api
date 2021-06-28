@@ -30,7 +30,7 @@ def get_user_by_id(user_id) -> "DiscordUser|None":
     return DiscordUser.objects.get_or_create(id=user_id)[0]
 
 
-def get_member_by_id(guild_id, member_id) -> "Member|None":
+def get_member_by_id(guild_id, member_id) -> Member:
     """Get a DiscordUser by id
 
     Args:
