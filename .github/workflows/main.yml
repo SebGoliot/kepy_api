@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Python
+      uses: actions/setup-python@v2.1.4
+      with:
+        python-version: 3.9
+
+    - name: Start Redis
+      uses: supercharge/redis-github-action@1.2.0
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install -r test_requirements.txt
+
+    - name: Run tests and codecov
+      env:
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        REDIS: redis://
+        SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        KEPY_API_HOST: ${{ secrets.KEPY_API_HOST}}
+        AUTH_REDIRECT_URL: ${{ secrets.AUTH_REDIRECT_URL}}
+        DISCORD_API: ${{ secrets.DISCORD_API}}
+        DISCORD_CDN: ${{ secrets.DISCORD_CDN}}
+        KEPY_TOKEN: ${{ secrets.KEPY_TOKEN}}
+        CLIENT_ID: ${{ secrets.CLIENT_ID}}
+        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET}}
+
+      run: |
+        python manage.py makemigrations
+        coverage run --source='.' manage.py test
+        codecov -t ${{ secrets.CODECOV_TOKEN }}
