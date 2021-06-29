@@ -6,6 +6,7 @@ load_dotenv()
 
 
 DISCORD_API = getenv("DISCORD_API")
+DISCORD_CDN = getenv("DISCORD_CDN")
 KEPY_TOKEN = getenv("KEPY_TOKEN")
 REDIS = getenv("REDIS")
 

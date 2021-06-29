@@ -368,3 +368,5 @@ class TestPermissions(TestCase):
 
         self.assertTrue(has_permission(3, 1))   # 00000011 & 00000001
         self.assertTrue(has_permission(3, 2))   # 00000011 & 00000010
+        self.assertFalse(has_permission(2, 1))  # 00000010 & 00000001
+        self.assertFalse(has_permission(4, 2))  # 00000100 & 00000010

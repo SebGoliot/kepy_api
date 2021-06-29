@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from kepy.settings.base import DISCORD_CDN
 
 from api.models import DiscordUser, Guild, Member
 
@@ -67,4 +68,4 @@ def get_avatar_url(user_id, avatar) -> str:
     Returns:
         str: The avatar URL
     """
-    return f"https://cdn.discordapp.com/avatars/{user_id}/{avatar}"
+    return f"{DISCORD_CDN}/avatars/{user_id}/{avatar}"
