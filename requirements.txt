@@ -1,11 +1,11 @@
-django
-djangorestframework
-drf-nested-routers
-django-cors-headers
-python-dotenv
-celery[redis]
-requests
-sentry-sdk
-psycopg2                    ; platform_system=='Windows'
-psycopg2-binary             ; platform_system=='Linux'
-gunicorn
+django              >= 3.*
+djangorestframework >= 1.*
+drf-nested-routers  >= 0.*
+django-cors-headers >= 3.*
+python-dotenv       >= 0.*
+celery[redis]       >= 5.*
+requests            >= 2.*
+sentry-sdk          >= 1.*
+psycopg2            >= 2.*  ; platform_system=='Windows'
+psycopg2-binary     >= 2.*  ; platform_system=='Linux'
+gunicorn            >= 20.*
