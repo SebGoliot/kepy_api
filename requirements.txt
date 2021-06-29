@@ -9,3 +9,4 @@ sentry-sdk          >= 1.*
 psycopg2            >= 2.*  ; platform_system=='Windows'
 psycopg2-binary     >= 2.*  ; platform_system=='Linux'
 gunicorn            >= 20.*
+whitenoise          >= 5.*
