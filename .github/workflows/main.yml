@@ -39,6 +39,7 @@ jobs:
         KEPY_TOKEN: ${{ secrets.KEPY_TOKEN}}
         CLIENT_ID: ${{ secrets.CLIENT_ID}}
         CLIENT_SECRET: ${{ secrets.CLIENT_SECRET}}
+        KEPY_FRONTEND_URL: ${{ secrets.KEPY_FRONTEND_URL}}
 
       run: |
         python manage.py makemigrations
