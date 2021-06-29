@@ -7,6 +7,7 @@ load_dotenv()
 
 DISCORD_API = getenv("DISCORD_API")
 DISCORD_CDN = getenv("DISCORD_CDN")
+
 KEPY_TOKEN = getenv("KEPY_TOKEN")
 REDIS = getenv("REDIS")
 
@@ -17,6 +18,8 @@ AUTH_REDIRECT_URL = getenv("AUTH_REDIRECT_URL")
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = getenv("SECRET_KEY")
+
+CORS_ALLOWED_ORIGINS = [getenv("KEPY_FRONTEND_URL")]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
