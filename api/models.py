@@ -3,7 +3,7 @@ from django.db.models import (
     CharField,
     IntegerField,
     DateTimeField,
-    SmallIntegerField,
+    BigIntegerField,
     UniqueConstraint,
 )
 from django.db.models.deletion import CASCADE
@@ -12,14 +12,14 @@ from django.db.models.fields.related import ForeignKey
 
 
 class DiscordUser(Model):
-    id = IntegerField(primary_key=True)
+    id = BigIntegerField(primary_key=True)
 
 
 class Guild(Model):
-    id = IntegerField(primary_key=True)
+    id = BigIntegerField(primary_key=True)
     date_created = DateTimeField()
     prefix = CharField(max_length=8, default="%")
-    mute_role_id = IntegerField(default=0)
+    mute_role_id = BigIntegerField(default=0)
 
 
 class Member(Model):
@@ -34,10 +34,10 @@ class Member(Model):
 
 class Message(Model):
     MESSAGE_STATE = [("DEFAULT", "default"), ("EDITED", "edit"), ("DELETED", "deleted")]
-    id = IntegerField(primary_key=True)
+    id = BigIntegerField(primary_key=True)
     created_at = DateTimeField()
     author = ForeignKey(DiscordUser, on_delete=CASCADE)
-    channel_id = IntegerField()
+    channel_id = BigIntegerField()
     guild = ForeignKey(Guild, on_delete=CASCADE)
     content = CharField(max_length=2048, default="", blank=True)
     state = CharField(choices=MESSAGE_STATE, default="DEFAULT", max_length=8)
