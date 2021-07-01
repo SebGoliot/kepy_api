@@ -66,7 +66,7 @@ class MuteViewSet(viewsets.ModelViewSet):
         """Cancels a mute"""
         if guild_pk:
             mute = Mute.objects.get(guild=guild_pk, user=member_pk, pk=pk)
+            cancel_mute(mute)
+            return Response(status=204)
         else:
             return Response(status=403)
-        cancel_mute(mute)
-        return Response(status=204)
