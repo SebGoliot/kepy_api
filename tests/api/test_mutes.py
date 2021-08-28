@@ -37,6 +37,7 @@ class TestMutes(TestCase):
         request = self.client.post(
             "/guilds/42/members/123/mutes/",
             {"author": 123, "duration": 42},
+            "application/json"
         )
         content = request.json()
 
