@@ -1,35 +1,45 @@
 import requests
+from requests.models import Response
 from kepy.settings.base import DISCORD_API, KEPY_TOKEN
 
 
-def api_get(api_route: str, auth: str = None) -> "dict | None":
+def api_get(api_route: str, auth: str = None) -> dict:
     if not auth:
         auth = f"Bot {KEPY_TOKEN}"
     r = requests.get(
         url=f"{DISCORD_API}{api_route}",
         headers={"Authorization": auth},
     )
-    if r.status_code == 200:
-        return r.json()
-    else:
-        return None
+    if r.status_code != 200:
+        raise Exception(
+            f"GET request returned {r.status_code} code: expected 200\n{r}"
+        )
+    return r.json()
 
 
 def api_put(api_route: str, reason: str = ""):
-    return requests.put(
+    r = requests.put(
         url=f"{DISCORD_API}{api_route}",
         headers={"Authorization": f"Bot {KEPY_TOKEN}", "X-Audit-Log-Reason": reason},
     )
+    if r.status_code != 204:
+        raise Exception(
+            f"PUT request returned {r.status_code} code: expected 204\n{r}"
+        )
 
 
 def api_delete(api_route: str, reason: str = ""):
-    return requests.delete(
+    r = requests.delete(
         url=f"{DISCORD_API}{api_route}",
         headers={"Authorization": f"Bot {KEPY_TOKEN}", "X-Audit-Log-Reason": reason},
     )
+    if r.status_code != 204:
+        raise Exception(
+            f"DELETE request returned {r.status_code} code: expected 204\n{r}"
+        )
 
 
-def get_user_from_api(user_id) -> "dict | None":
+def get_user_from_api(user_id) -> dict:
     """Gets an user from the api
 
     Args:
@@ -41,7 +51,7 @@ def get_user_from_api(user_id) -> "dict | None":
     return api_get(api_route=f"/users/{user_id}")
 
 
-def get_member_from_api(guild_id, member_id) -> "dict | None":
+def get_member_from_api(guild_id, member_id) -> dict:
     """Gets an user from the api
 
     Args:

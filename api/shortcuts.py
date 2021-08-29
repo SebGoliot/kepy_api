@@ -17,7 +17,6 @@ def get_guild_by_id(guild_id) -> "Guild":
         id=guild_id,
         date_created=get_snowflake_time(guild_id),
     )[0]
-    #FIXME Bad design, not supposed to create on GET
 
 
 def get_user_by_id(user_id) -> "DiscordUser|None":
@@ -30,7 +29,6 @@ def get_user_by_id(user_id) -> "DiscordUser|None":
         DiscordUser: The DiscordUser
     """
     return DiscordUser.objects.get_or_create(id=user_id)[0]
-    #FIXME Bad design, not supposed to create on GET
 
 
 def get_member_by_id(guild_id, member_id) -> Member:
@@ -45,7 +43,6 @@ def get_member_by_id(guild_id, member_id) -> Member:
     user = get_user_by_id(user_id=member_id)
     guild = get_guild_by_id(guild_id=guild_id)
     return Member.objects.get_or_create(user=user, guild=guild)[0]
-    #FIXME Bad design, not supposed to create on GET
 
 
 def get_snowflake_time(snowflake) -> datetime:
