@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 from rest_framework import viewsets, serializers
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from celery.worker.control import revoke
 
 from api.shortcuts import get_guild_by_id, get_user_by_id
 from api.models import Mute

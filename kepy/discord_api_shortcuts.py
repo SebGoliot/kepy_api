@@ -1,5 +1,4 @@
 import requests
-from requests.models import Response
 from kepy.settings.base import DISCORD_API, KEPY_TOKEN
 
 
