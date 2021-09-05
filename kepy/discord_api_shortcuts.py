@@ -16,7 +16,7 @@ def api_get(api_route: str, auth: str = None) -> dict:
     return r.json()
 
 
-def api_put(api_route: str, reason: str = ""):
+def api_put(api_route: str, reason: str = "") -> None:
     r = requests.put(
         url=f"{DISCORD_API}{api_route}",
         headers={"Authorization": f"Bot {KEPY_TOKEN}", "X-Audit-Log-Reason": reason},
@@ -27,7 +27,7 @@ def api_put(api_route: str, reason: str = ""):
         )
 
 
-def api_delete(api_route: str, reason: str = ""):
+def api_delete(api_route: str, reason: str = "") -> None:
     r = requests.delete(
         url=f"{DISCORD_API}{api_route}",
         headers={"Authorization": f"Bot {KEPY_TOKEN}", "X-Audit-Log-Reason": reason},

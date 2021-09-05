@@ -20,13 +20,13 @@ class GuildViewSet(viewsets.ModelViewSet):
     queryset = Guild.objects.all().order_by("-date_created")
     serializer_class = GuildSerializer
 
-    def retrieve(self, request, pk=None):
+    def retrieve(self, request, pk=None) -> Response:
         if guild := get_guild_by_id(pk):
             serializer = GuildSerializer(guild)
             return Response(serializer.data)
         return Response(status=404)
 
-    def patch(self, request, pk):
+    def patch(self, request, pk) -> Response:
         if guild := get_guild_by_id(pk):
             serializer = GuildSerializer(guild, data=request.data, partial=True)
             if serializer.is_valid():

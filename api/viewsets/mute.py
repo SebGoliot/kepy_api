@@ -21,7 +21,7 @@ class MuteViewSet(viewsets.ModelViewSet):
     queryset = Mute.objects.all().order_by("-start_time")
     serializer_class = MuteSerializer
 
-    def retrieve(self, request, guild_pk=None, member_pk=None, pk=None):
+    def retrieve(self, request, guild_pk=None, member_pk=None, pk=None) -> Response:
         try:
             if guild_pk:
                 mute = Mute.objects.get(guild=guild_pk, user=member_pk, pk=pk)
@@ -33,7 +33,7 @@ class MuteViewSet(viewsets.ModelViewSet):
         serializer = MuteSerializer(mute)
         return Response(serializer.data)
 
-    def create(self, request, guild_pk=None, member_pk=None):
+    def create(self, request, guild_pk=None, member_pk=None) -> Response:
         """Creates a mute and prepares the unmute task"""
         reason = request.data.get("reason")
         if not reason:
@@ -63,7 +63,7 @@ class MuteViewSet(viewsets.ModelViewSet):
         return super().create(request)
 
     @action(methods=["PUT"], detail=True)
-    def cancel(self, request, guild_pk=None, member_pk=None, pk=None):
+    def cancel(self, request, guild_pk=None, member_pk=None, pk=None) -> Response:
         """Cancels a mute"""
         if guild_pk:
             mute = Mute.objects.get(guild=guild_pk, user=member_pk, pk=pk)

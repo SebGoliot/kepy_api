@@ -20,7 +20,7 @@ class MemberViewSet(viewsets.ModelViewSet):
     queryset = Member.objects.all()
     serializer_class = MemberSerializer
 
-    def retrieve(self, request, guild_pk=None, pk=None):
+    def retrieve(self, request, guild_pk=None, pk=None) -> Response:
         """Returns a member, creates it if not found
 
         Args:
@@ -35,7 +35,7 @@ class MemberViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @action(methods=["PUT"], detail=True, url_path="cancel-mutes")
-    def cancel_mutes(self, request, guild_pk=None, pk=None):
+    def cancel_mutes(self, request, guild_pk=None, pk=None) -> Response:
         """Cancels a member mute
 
         Args:
