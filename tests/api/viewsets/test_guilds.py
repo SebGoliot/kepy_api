@@ -57,3 +57,22 @@ class TestGuilds(TestCase):
         self.assertEqual(request.status_code, 200)
         self.assertEqual(content["id"], 42)
         self.assertNotEqual(content["id"], 123)
+
+    def test_guilds_patch(self):
+        """Testing GET on /guilds/"""
+        self.client.force_login(self.user)
+
+        pre_request = self.client.get("/guilds/42/")
+        self.assertEqual(pre_request.json()["prefix"], "!")
+
+        patch_request = self.client.patch(
+            "/guilds/42/",
+            {
+                "prefix": "$",
+            },
+            content_type='application/json'
+        )
+        self.assertEqual(patch_request.status_code, 201)
+
+        post_request = self.client.get("/guilds/42/")
+        self.assertEqual(post_request.json()["prefix"], "$")

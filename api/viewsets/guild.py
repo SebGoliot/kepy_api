@@ -21,15 +21,14 @@ class GuildViewSet(viewsets.ModelViewSet):
     serializer_class = GuildSerializer
 
     def retrieve(self, request, pk=None) -> Response:
-        if guild := get_guild_by_id(pk):
-            serializer = GuildSerializer(guild)
-            return Response(serializer.data)
-        return Response(status=404)
+        guild = get_guild_by_id(pk)
+        serializer = GuildSerializer(guild)
+        return Response(status=200, data=serializer.data)
 
-    def patch(self, request, pk) -> Response:
-        if guild := get_guild_by_id(pk):
-            serializer = GuildSerializer(guild, data=request.data, partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(status=201, data=serializer.data)
+    def partial_update(self, request, pk) -> Response:
+        guild = get_guild_by_id(pk)
+        serializer = GuildSerializer(guild, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=201, data=serializer.data)
         return Response(status=400)
