@@ -5,7 +5,7 @@
 ## 1. Présentation
 Ceci est l'API utilisée par le bot Discord [kepy](https://github.com/SebGoliot/kepy_bot).  
 L'API en elle même représente une portion de l'infrastructure nécessaire au bon fonctionnement du bot, qui a aussi besoin d'une base de données et d'un système de queue.  
-C'est pour cela que le projet inclut un fichier `docker-compose.yml` prêt à être utilisé avec PostgreSQL, Celery et Redis.  
+C'est pour cela que le projet inclut un fichier `docker-compose.yml` prêt à être utilisé avec PostgreSQL et Redis.  
 
 ## 2. Fonctionnalités
 
