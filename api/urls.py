@@ -6,7 +6,9 @@ from api.viewsets.guild import GuildViewSet
 from api.viewsets.member import MemberViewSet
 from api.viewsets.message import MessageViewSet
 from api.viewsets.mute import MuteViewSet
+
 from api.views.discord_views import get_user_guilds, discord_login
+from api.views.interactions import interactions
 
 router = routers.DefaultRouter()
 
@@ -50,6 +52,7 @@ members_router.register("mutes", MuteViewSet, basename="member-mutes")
 urlpatterns = [
     path("login/", discord_login, name="discord_login"),
     path("user-guilds/", get_user_guilds, name="get_user_guilds"),
+    path("interactions/", interactions, name="interactions"),
     path("", include(router.urls)),
     path("", include(users_router.urls)),
     path("", include(guilds_router.urls)),
