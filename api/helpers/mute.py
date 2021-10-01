@@ -1,7 +1,44 @@
-from api.shortcuts import get_guild_by_id
+from datetime import datetime, timedelta
 from celery.worker.control import revoke
+
 from api.models import Mute
+from api.shortcuts import get_guild_by_id, get_user_by_id
 from kepy_worker import app
+
+
+
+def create_mute(guild_id, author_id, muted_id, duration, reason = None):
+
+    author = get_user_by_id(author_id)
+    muted = get_user_by_id(muted_id)
+    if reason == None or reason == "":
+        reason = f"Muted by {author}"
+
+    guild = get_guild_by_id(guild_id)
+    task_args = (
+        guild_id,
+        muted_id,
+        guild.mute_role_id,
+        reason,
+    )
+    app.send_task("kepy_worker.mute_tasks.tasks.mute", task_args)
+    unmute_task = app.send_task(
+        "kepy_worker.mute_tasks.tasks.unmute",
+        task_args,
+        eta=datetime.now() + timedelta(seconds=int(duration)),
+    )
+
+    mute = Mute.objects.create(
+        guild = guild,
+        user = muted,
+        author = author,
+        duration = duration,
+        unmute_task_id = unmute_task.id,
+        reason = reason,
+    )
+
+    return mute
+
 
 
 def cancel_mute(mute, reason: str = ""):
