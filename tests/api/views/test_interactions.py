@@ -3,6 +3,7 @@ from django.test import TestCase, override_settings
 from nacl.signing import SigningKey
 from time import time
 import binascii
+import json
 
 
 class TestInteractions(TestCase):
@@ -22,8 +23,10 @@ class TestInteractions(TestCase):
             HttpResponse: The POST requst response
         """
 
-        timestamp = time()
-        data = f"{timestamp}{body}".encode()
+        json_body = json.dumps(body)
+        
+        timestamp = int(time())
+        data = f"{timestamp}{json_body}".encode()
 
         signing_key = SigningKey.generate()
         pub_key = binascii.hexlify(signing_key.verify_key.encode()).decode()
@@ -37,7 +40,8 @@ class TestInteractions(TestCase):
         with override_settings(KEPY_PUBLIC_KEY=pub_key):
             return self.client.post(
                 path=route,
-                data=body,
+                data=json_body.encode(),
+                # data=body.__repr__().encode(),
                 content_type="application/json",
                 **headers,
             )
@@ -59,7 +63,8 @@ class TestInteractions(TestCase):
         }
         request = self.client.post(
             "/interactions/",
-            {"type": 1},
+            data=json.dumps({"type": 1}).encode(),
+            content_type="application/json",
             **headers
         )
         self.assertEqual(request.status_code, 401)
