@@ -4,15 +4,13 @@ from nacl.signing import SigningKey
 from time import time
 import binascii
 
+
 class TestInteractions(TestCase):
-    """Tests for the following routes:
-    /guilds/
-    /guilds/{guild_pk}/
+    """Tests for the interactions route, and all interactions
     """
 
-    def signed_post(
-        self, route: str, body: dict, headers: dict = {}
-        ) -> HttpResponse:
+
+    def signed_post(self, route: str, body: dict, headers: dict = {}) -> HttpResponse:
         """Method used to send signed POST requests
 
         Args:
@@ -44,7 +42,6 @@ class TestInteractions(TestCase):
                 **headers,
             )
 
-
     def test_interactions_ping(self):
         """Testing Discord PING on /interactions/"""
         request = self.signed_post(
@@ -61,3 +58,57 @@ class TestInteractions(TestCase):
             {"type": 42},
         )
         self.assertEqual(request.status_code, 400)
+
+    def test_interactions_mute_author(self):
+        """Testing 'Mute author' interaction"""
+        request = self.signed_post(
+            "/interactions/",
+            {
+                "data": {
+                    "name": "Mute author",
+                    "resolved": {
+                        "messages": {
+                            "456": {
+                                "author": {
+                                    "id": "123",
+                                    "username": "test",
+                                },
+                            }
+                        }
+                    },
+                    "target_id": "456",
+                },
+                "guild_id": "42",
+                "member": {
+                    "permissions": "1099511627775",
+                    "user": {
+                        "id": "789",
+                        "username": "interact_author",
+                    },
+                },
+                "type": 2,
+            },
+        )
+        self.assertEqual(request.status_code, 200)
+
+
+    def test_interactions_mute_author_not_allowed(self):
+        """Testing 'Mute author' interaction"""
+        request = self.signed_post(
+            "/interactions/",
+            {
+                "data": {
+                    "name": "Mute author",
+                },
+                "member": {
+                    "permissions": "0",
+                    "user": {
+                        "id": "789",
+                        "username": "interact_author",
+                    },
+                },
+                "type": 2,
+            },
+        )
+        self.assertEqual(request.status_code, 200)
+        self.assertContains(request, "not allowed", 1, 200)
