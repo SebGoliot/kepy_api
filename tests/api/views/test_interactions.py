@@ -24,7 +24,7 @@ class TestInteractions(TestCase):
         """
 
         json_body = json.dumps(body)
-        
+
         timestamp = int(time())
         data = f"{timestamp}{json_body}".encode()
 
@@ -41,7 +41,6 @@ class TestInteractions(TestCase):
             return self.client.post(
                 path=route,
                 data=json_body.encode(),
-                # data=body.__repr__().encode(),
                 content_type="application/json",
                 **headers,
             )

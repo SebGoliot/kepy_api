@@ -37,6 +37,7 @@ jobs:
         DISCORD_API: ${{ secrets.DISCORD_API}}
         DISCORD_CDN: ${{ secrets.DISCORD_CDN}}
         KEPY_TOKEN: ${{ secrets.KEPY_TOKEN}}
+        KEPY_PUBLIC_KEY: ${{ secrets.KEPY_PUBLIC_KEY}}
         CLIENT_ID: ${{ secrets.CLIENT_ID}}
         CLIENT_SECRET: ${{ secrets.CLIENT_SECRET}}
         KEPY_FRONTEND_URL: ${{ secrets.KEPY_FRONTEND_URL}}
