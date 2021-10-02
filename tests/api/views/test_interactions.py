@@ -50,9 +50,23 @@ class TestInteractions(TestCase):
         )
         self.assertEqual(request.status_code, 200)
 
+    def test_interactions_ping_bad_signature(self):
+        """Testing Discord PING with a bad signature"""
+        
+        headers = {
+            "HTTP_X_SIGNATURE_ED25519": "00112233",
+            "HTTP_X_SIGNATURE_TIMESTAMP": 42,
+        }
+        request = self.client.post(
+            "/interactions/",
+            {"type": 1},
+            **headers
+        )
+        self.assertEqual(request.status_code, 401)
+        self.assertContains(request, "invalid request signature", 1, 401)
 
     def test_interactions_post_bad_request(self):
-        """Testing Discord PING on /interactions/"""
+        """Testing a bad request on /interactions/"""
         request = self.signed_post(
             "/interactions/",
             {"type": 42},
