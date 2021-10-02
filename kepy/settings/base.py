@@ -9,6 +9,7 @@ DISCORD_API = getenv("DISCORD_API")
 DISCORD_CDN = getenv("DISCORD_CDN")
 
 KEPY_TOKEN = getenv("KEPY_TOKEN")
+KEPY_PUBLIC_KEY = getenv("KEPY_PUBLIC_KEY", "")
 REDIS = getenv("REDIS")
 
 CLIENT_ID = getenv("CLIENT_ID")
