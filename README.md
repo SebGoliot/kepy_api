@@ -14,7 +14,9 @@ Ce projet est toujours en construction, et ses fonctionnalités s'enrichiront au
 ## 3. Utilisation
 
 Le déploiement actuel utilise Traefik, mais l'utilisation d'un autre reverse-proxy tel que NGINX est envisageable.  
+Afin d'utiliser les interactions Discord, il est nécessaire de configurer un endpoint HTTP ainsi que des commandes auprès de l'API Discord.  
 
 - Après avoir cloné le projet, copier et remplir le fichier `.env.sample` renommé en `.env`  
 - S'assurer que Traefik est lancé et correctement configuré.  
-- Il n'y a plus qu'à utiliser docker-compose avec `docker-compose up`
+- Il n'y a plus qu'à lancer docker-compose avec `docker-compose up`
+
