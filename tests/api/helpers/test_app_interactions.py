@@ -4,7 +4,7 @@ from api.helpers.app_interactions import *
 
 
 class TestAppInteractionsHelpers(TestCase):
-    """Tests for the mute helper functions"""
+    """Tests for the app interactions helper functions"""
 
     @classmethod
     def setUpClass(cls) -> None:

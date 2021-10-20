@@ -3,13 +3,13 @@ from django.test import TestCase
 from api.helpers.slash_interactions import *
 
 
-class TestAppInteractionsHelpers(TestCase):
-    """Tests for the mute helper functions"""
+class TestSlashInteractionsHelpers(TestCase):
+    """Tests for the slash interactions functions"""
 
     @classmethod
     def setUpClass(cls) -> None:
         """Tests setup"""
-        super(TestAppInteractionsHelpers, cls).setUpClass()
+        super(TestSlashInteractionsHelpers, cls).setUpClass()
 
         cls.interaction = {
             "data": {
