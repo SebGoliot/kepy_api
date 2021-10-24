@@ -25,7 +25,7 @@ class MuteViewSet(viewsets.ModelViewSet):
             else:
                 mute = Mute.objects.get(user=member_pk, pk=pk)
         except Mute.DoesNotExist:
-            return Response(404)
+            return Response(status=404)
 
         serializer = MuteSerializer(mute)
         return Response(serializer.data)

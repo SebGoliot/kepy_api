@@ -1,10 +1,10 @@
 from datetime import datetime, timezone
-from kepy.settings.base import DISCORD_CDN
 
+from kepy.settings.base import DISCORD_CDN
 from api.models import DiscordUser, Guild, Member
 
 
-def get_guild_by_id(guild_id) -> "Guild":
+def get_guild_by_id(guild_id) -> Guild:
     """Get a Guild by id
 
     Args:
@@ -19,7 +19,7 @@ def get_guild_by_id(guild_id) -> "Guild":
     )[0]
 
 
-def get_user_by_id(user_id) -> "DiscordUser|None":
+def get_user_by_id(user_id) -> DiscordUser:
     """Get a DiscordUser by id
 
     Args:
