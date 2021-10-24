@@ -64,6 +64,16 @@ class TestMutes(TestCase):
         self.assertEqual(content["user"], 123)
         self.assertNotEqual(content["user"], 999)
 
+    def test_mutes_get_id_404(self):
+        """
+        Testing GET on /guilds/{guild_pk}/members/{member_pk}/mutes/{mute_pk}/
+        with a non-existent mute
+        """
+        self.client.force_login(self.user)
+        request = self.client.get("/guilds/42/members/123/mutes/123/")
+
+        self.assertEqual(request.status_code, 404)
+
     def test_user_mutes_get(self):
         """Testing GET on /users/{user_pk}/mutes/"""
         self.client.force_login(self.user)

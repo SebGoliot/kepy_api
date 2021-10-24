@@ -1,8 +1,8 @@
-from api.shortcuts import get_snowflake_time
 from django.test import TestCase
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
 
+from api.shortcuts import get_snowflake_time
 from api.models import Guild
 
 
@@ -59,7 +59,7 @@ class TestGuilds(TestCase):
         self.assertNotEqual(content["id"], 123)
 
     def test_guilds_patch(self):
-        """Testing GET on /guilds/"""
+        """Testing PATCH on /guilds/"""
         self.client.force_login(self.user)
 
         pre_request = self.client.get("/guilds/42/")
@@ -76,3 +76,15 @@ class TestGuilds(TestCase):
 
         post_request = self.client.get("/guilds/42/")
         self.assertEqual(post_request.json()["prefix"], "$")
+
+    def test_guilds_patch_invalid(self):
+        """Testing invalid PATCH on /guilds/"""
+        self.client.force_login(self.user)
+
+        patch_request = self.client.patch(
+            "/guilds/42/",
+            "42",
+            content_type='application/json'
+        )
+
+        self.assertEqual(patch_request.status_code, 400)
