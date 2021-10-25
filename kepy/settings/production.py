@@ -29,15 +29,12 @@ SECURE_HSTS_SECONDS = 2592000  # 30 days
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
 
-POSTGRES_DB = getenv("POSTGRES_DB")
-POSTGRES_USER = getenv("POSTGRES_USER")
-POSTGRES_PASSWORD = getenv("POSTGRES_PASSWORD")
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": POSTGRES_DB,
-        "USER": POSTGRES_USER,
-        "PASSWORD": POSTGRES_PASSWORD,
+        "NAME": getenv("POSTGRES_DB"),
+        "USER": getenv("POSTGRES_USER"),
+        "PASSWORD": getenv("POSTGRES_PASSWORD"),
         "HOST": "db",
         "PORT": 5432,
     }
