@@ -1,5 +1,6 @@
 from rest_framework_nested import routers
 from django.urls import include, path
+from api.viewsets.attachment import AttachmentViewSet
 
 from api.viewsets.discord_user import DiscordUserViewSet
 from api.viewsets.guild import GuildViewSet
@@ -24,7 +25,7 @@ users_router.register("mutes", MuteViewSet, basename="user-mutes")
 # /users/{user_pk}/mutes
 # /users/{user_pk}/mutes/{mute_pk}
 
-users_router.register("messages", MessageViewSet, basename="user-messages")
+users_router.register("messages", MessageViewSet, basename="user-msgs")
 # /users/{user_pk}/messages
 # /users/{user_pk}/messages/{message_pk}
 
@@ -37,9 +38,14 @@ guilds_router.register("members", MemberViewSet, basename="guild-members")
 # /guilds/{guild_pk}/members/
 # /guilds/{guild_pk}/members/{member_pk}/
 
-guilds_router.register("messages", MessageViewSet, basename="guild-messages")
+guilds_router.register("messages", MessageViewSet, basename="guild-msgs")
 # /guilds/{guild_pk}/messages/
 # /guilds/{guild_pk}/messages/{message_pk}/
+
+attachments_router = routers.NestedSimpleRouter(guilds_router, "messages", lookup="attachment")
+attachments_router.register("attachments", AttachmentViewSet, basename="msg-attachments")
+# /guilds/{guild_pk}/messages/{message_pk}/attachments/
+# /guilds/{guild_pk}/messages/{message_pk}/attachments/{attachment_pk}/
 
 members_router = routers.NestedSimpleRouter(guilds_router, "members", lookup="member")
 members_router.register("mutes", MuteViewSet, basename="member-mutes")
