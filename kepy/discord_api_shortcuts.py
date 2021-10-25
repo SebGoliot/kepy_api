@@ -38,7 +38,7 @@ def api_delete(api_route: str, reason: str = "") -> None:
         )
 
 
-def get_user_from_api(user_id) -> dict:
+def api_get_user(user_id) -> dict:
     """Gets an user from the api
 
     Args:
@@ -50,7 +50,7 @@ def get_user_from_api(user_id) -> dict:
     return api_get(api_route=f"/users/{user_id}")
 
 
-def get_member_from_api(guild_id, member_id) -> dict:
+def api_get_member(guild_id, member_id) -> dict:
     """Gets an user from the api
 
     Args:
