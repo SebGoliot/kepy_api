@@ -27,8 +27,7 @@ def exchange_code(code):
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def discord_login(request):
-    code = request.data.get("code")
-    tokens = exchange_code(code)
+    tokens = exchange_code(request.data.get("code"))
     return HttpResponse(tokens, content_type="application/json", status=200)
 
 
@@ -50,8 +49,8 @@ def get_user_guilds(request):
                 user_status = "moderator"
             else:
                 user_status = "member"
-            guild_id = guild["id"]
-            guild_icon = guild["icon"]
+
+            guild_id, guild_icon = guild["id"], guild["icon"]
             _guild = {
                 "id": guild_id,
                 "name": guild["name"],
