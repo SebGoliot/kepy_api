@@ -6,12 +6,25 @@ from api.shortcuts import get_guild_by_id, get_user_by_id
 from kepy_worker import app
 
 
+def create_mute(
+    guild_id: int, author_id: int, muted_id: int, duration: int, reason: str = None
+) -> Mute:
+    """Create a new mute
 
-def create_mute(guild_id, author_id, muted_id, duration, reason = None):
+    Args:
+        guild_id (int): The guild id
+        author_id (int): The mute author id
+        muted_id (int): The muted member id
+        duration (int): The mute duration in seconds
+        reason (str, optional): The reason of the mute. Defaults to None.
+
+    Returns:
+        Mute: The newly created Mute object
+    """
 
     author = get_user_by_id(author_id)
     muted = get_user_by_id(muted_id)
-    if reason == None or reason == "":
+    if reason in [None, ""]:
         reason = f"Muted by {author}"
 
     guild = get_guild_by_id(guild_id)
@@ -29,19 +42,18 @@ def create_mute(guild_id, author_id, muted_id, duration, reason = None):
     )
 
     mute = Mute.objects.create(
-        guild = guild,
-        user = muted,
-        author = author,
-        duration = duration,
-        unmute_task_id = unmute_task.id,
-        reason = reason,
+        guild=guild,
+        user=muted,
+        author=author,
+        duration=duration,
+        unmute_task_id=unmute_task.id,
+        reason=reason,
     )
 
     return mute
 
 
-
-def cancel_mute(mute, reason: str = ""):
+def cancel_mute(mute, reason: str = "") -> None:
     """Cancels a mute
 
     Args:
@@ -59,7 +71,7 @@ def cancel_mute(mute, reason: str = ""):
     mute.save()
 
 
-def cancel_member_mutes(guild_id, user_id):
+def cancel_member_mutes(guild_id: int, user_id: int) -> None:
     """Cancels a member's mutes
 
     Args:
@@ -71,7 +83,7 @@ def cancel_member_mutes(guild_id, user_id):
         cancel_mute(mute)
 
 
-def end_member_mutes(guild_id, user_id):
+def end_member_mutes(guild_id: int, user_id: int) -> None:
     """End a member's mute
 
     Args:
