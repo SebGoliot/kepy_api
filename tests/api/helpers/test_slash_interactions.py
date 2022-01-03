@@ -22,6 +22,7 @@ class TestSlashInteractionsHelpers(TestCase):
         }
 
     def test_get_slash_options(self):
+        """Test the get_slash_options function"""
 
         options = get_slash_options(self.interaction)
         test_data = {
