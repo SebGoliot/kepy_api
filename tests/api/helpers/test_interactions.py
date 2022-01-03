@@ -33,12 +33,12 @@ class TestInteractionsHelpers(TestCase):
     def test_get_interaction_guild_id(self):
 
         data = get_interaction_guild_id(self.interaction)
-        self.assertEqual(data, "42")
+        self.assertEqual(data, 42)
 
     def test_get_interaction_author_id(self):
 
         data = get_interaction_author_id(self.interaction)
-        self.assertEqual(data, "123")
+        self.assertEqual(data, 123)
 
     def test_get_interaction_author_permissions(self):
 
