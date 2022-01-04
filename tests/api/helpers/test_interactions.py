@@ -26,21 +26,25 @@ class TestInteractionsHelpers(TestCase):
         }
 
     def test_get_interaction_name(self):
+        """Test the get_interaction_name function"""
 
         data = get_interaction_name(self.interaction)
         self.assertEqual(data, "interaction_name")
 
     def test_get_interaction_guild_id(self):
+        """Test the get_interaction_guild_id function"""
 
         data = get_interaction_guild_id(self.interaction)
         self.assertEqual(data, 42)
 
     def test_get_interaction_author_id(self):
+        """Test the get_interaction_author_id function"""
 
         data = get_interaction_author_id(self.interaction)
         self.assertEqual(data, 123)
 
     def test_get_interaction_author_permissions(self):
+        """Test the get_interaction_author_permissions function"""
 
         data = get_interaction_author_permissions(self.interaction)
         self.assertEqual(data, 10)
