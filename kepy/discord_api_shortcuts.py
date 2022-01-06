@@ -3,7 +3,15 @@ from kepy.settings.base import DISCORD_API, KEPY_TOKEN
 
 
 def api_get(api_route: str, auth: str = None) -> dict:
-    if not auth:
+    """Gets an object from the api
+
+    Args:
+        api_route (str): The api route to get the object from
+        auth (str, optional): The auth token. Defaults to None.
+
+    Returns:
+        dict: The object
+    """
         auth = f"Bot {KEPY_TOKEN}"
     r = requests.get(
         url=f"{DISCORD_API}{api_route}",
@@ -17,6 +25,12 @@ def api_get(api_route: str, auth: str = None) -> dict:
 
 
 def api_put(api_route: str, reason: str = "") -> None:
+    """Puts an object to the api
+
+    Args:
+        api_route (str): The api route to put the object to
+        reason (str, optional): The reason of the action. Defaults to "".
+    """
     r = requests.put(
         url=f"{DISCORD_API}{api_route}",
         headers={"Authorization": f"Bot {KEPY_TOKEN}", "X-Audit-Log-Reason": reason},
@@ -28,6 +42,12 @@ def api_put(api_route: str, reason: str = "") -> None:
 
 
 def api_delete(api_route: str, reason: str = "") -> None:
+    """Deletes an object from the api
+
+    Args:
+        api_route (str): The api route to delete the object from
+        reason (str, optional): The reason of the action. Defaults to "".
+    """
     r = requests.delete(
         url=f"{DISCORD_API}{api_route}",
         headers={"Authorization": f"Bot {KEPY_TOKEN}", "X-Audit-Log-Reason": reason},
