@@ -1,5 +1,5 @@
-django              >= 3.*
-djangorestframework >= 1.*
+django              >= 4.*
+djangorestframework >= 3.*
 drf-nested-routers  >= 0.*
 django-cors-headers >= 3.*
 python-dotenv       >= 0.*
