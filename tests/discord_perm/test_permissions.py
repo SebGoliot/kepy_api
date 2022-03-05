@@ -85,7 +85,7 @@ class TestPermissions(TestCase):
         permission = get_base_permissions(self.guild, self.members[0])
         # check if those permissions are True
         self.assertTrue(permission & VIEW_CHANNEL == VIEW_CHANNEL)
-        self.assertTrue(permission & USE_SLASH_COMMANDS == USE_SLASH_COMMANDS)
+        self.assertTrue(permission & USE_APPLICATION_COMMANDS == USE_APPLICATION_COMMANDS)
         self.assertTrue(permission & READ_MESSAGE_HISTORY == READ_MESSAGE_HISTORY)
         # check if those permissions are False
         self.assertFalse(permission & ADMINISTRATOR == ADMINISTRATOR)
@@ -170,7 +170,7 @@ class TestPermissions(TestCase):
         self.assertFalse(overwrites & MANAGE_MESSAGES == MANAGE_MESSAGES)
         self.assertFalse(overwrites & READ_MESSAGE_HISTORY == READ_MESSAGE_HISTORY)
         self.assertFalse(overwrites & SEND_TTS_MESSAGES == SEND_TTS_MESSAGES)
-        self.assertFalse(overwrites & USE_SLASH_COMMANDS == USE_SLASH_COMMANDS)
+        self.assertFalse(overwrites & USE_APPLICATION_COMMANDS == USE_APPLICATION_COMMANDS)
         self.assertFalse(overwrites & MUTE_MEMBERS == MUTE_MEMBERS)
         self.assertFalse(overwrites & DEAFEN_MEMBERS == DEAFEN_MEMBERS)
         self.assertFalse(overwrites & MOVE_MEMBERS == MOVE_MEMBERS)
@@ -184,7 +184,7 @@ class TestPermissions(TestCase):
         self.assertTrue(overwrites & MANAGE_MESSAGES == MANAGE_MESSAGES)
         self.assertTrue(overwrites & READ_MESSAGE_HISTORY == READ_MESSAGE_HISTORY)
         self.assertTrue(overwrites & SEND_TTS_MESSAGES == SEND_TTS_MESSAGES)
-        self.assertTrue(overwrites & USE_SLASH_COMMANDS == USE_SLASH_COMMANDS)
+        self.assertTrue(overwrites & USE_APPLICATION_COMMANDS == USE_APPLICATION_COMMANDS)
         self.assertTrue(overwrites & MUTE_MEMBERS == MUTE_MEMBERS)
         self.assertTrue(overwrites & DEAFEN_MEMBERS == DEAFEN_MEMBERS)
         self.assertTrue(overwrites & MOVE_MEMBERS == MOVE_MEMBERS)
@@ -197,7 +197,7 @@ class TestPermissions(TestCase):
         # check if those permissions are now True
         self.assertTrue(overwrites & READ_MESSAGE_HISTORY == READ_MESSAGE_HISTORY)
         self.assertTrue(overwrites & SEND_TTS_MESSAGES == SEND_TTS_MESSAGES)
-        self.assertTrue(overwrites & USE_SLASH_COMMANDS == USE_SLASH_COMMANDS)
+        self.assertTrue(overwrites & USE_APPLICATION_COMMANDS == USE_APPLICATION_COMMANDS)
         # check if those permissions are now False
         self.assertFalse(overwrites & CONNECT == CONNECT)
         self.assertFalse(overwrites & SPEAK == SPEAK)
@@ -273,7 +273,7 @@ class TestPermissions(TestCase):
         )
         self.assertFalse(
             check_permissions(
-                self.guild, self.members[2], self.channels[0], USE_SLASH_COMMANDS
+                self.guild, self.members[2], self.channels[0], USE_APPLICATION_COMMANDS
             )
         )
         self.assertFalse(
@@ -313,7 +313,7 @@ class TestPermissions(TestCase):
         )
         self.assertTrue(
             check_permissions(
-                self.guild, self.members[3], self.channels[0], USE_SLASH_COMMANDS
+                self.guild, self.members[3], self.channels[0], USE_APPLICATION_COMMANDS
             )
         )
         self.assertTrue(
@@ -346,7 +346,7 @@ class TestPermissions(TestCase):
         )
         self.assertTrue(
             check_permissions(
-                self.guild, self.members[2], self.channels[1], USE_SLASH_COMMANDS
+                self.guild, self.members[2], self.channels[1], USE_APPLICATION_COMMANDS
             )
         )
         # check if those permissions are now False

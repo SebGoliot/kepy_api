@@ -57,7 +57,7 @@ class TestInteractions(TestCase):
         """Testing Discord PING with a bad signature"""
         
         headers = {
-            "HTTP_X_SIGNATURE_ED25519": "00112233",
+            "HTTP_X_SIGNATURE_ED25519": "15f7ed26ae45b9833f0d74be6ebe00a2e05aa771d91e6fff55ffdd63d0a80484dfa0c56b475b8222d2f39b8f6a04b9e8594d76a2c4e48bcddbbf08906ea0c406",
             "HTTP_X_SIGNATURE_TIMESTAMP": 42,
         }
         request = self.client.post(
