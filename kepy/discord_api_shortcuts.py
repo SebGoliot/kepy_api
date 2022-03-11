@@ -2,12 +2,12 @@ import requests
 from kepy.settings.base import DISCORD_API, KEPY_TOKEN
 
 
-def api_get(api_route: str, auth: str = None) -> dict:
+def api_get(api_route: str, auth: str = "") -> dict:
     """Gets an object from the api
 
     Args:
         api_route (str): The api route to get the object from
-        auth (str, optional): The auth token. Defaults to None.
+        auth (str, optional): The auth token. Defaults to an empty string.
 
     Returns:
         dict: The object

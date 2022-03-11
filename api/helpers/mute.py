@@ -7,7 +7,7 @@ from kepy_worker import app
 
 
 def create_mute(
-    guild_id: int, author_id: int, muted_id: int, duration: int, reason: str = None
+    guild_id: int, author_id: int, muted_id: int, duration: int, reason: str = ""
 ) -> Mute:
     """Create a new mute
 
