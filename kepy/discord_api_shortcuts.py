@@ -59,6 +59,28 @@ def api_delete(api_route: str, reason: str = "") -> None:
         )
 
 
+def api_patch(api_route: str, data: dict, reason: str = "") -> None:
+    """Patches an object to the api
+
+    Args:
+        api_route (str): The api route to patch the object to
+        data (dict): The data to patch
+        reason (str, optional): The reason of the action. Defaults to "".
+    """
+    r = requests.patch(
+        url=f"{DISCORD_API}{api_route}",
+        data=data,
+        headers={
+            "Authorization": f"Bot {KEPY_TOKEN}",
+            "X-Audit-Log-Reason": reason,
+        },
+    )
+    if r.status_code != 204:
+        raise Exception(
+            f"PATCH request returned {r.status_code} code: expected 204\n{r}"
+        )
+
+
 def api_get_user(user_id) -> dict:
     """Gets an user from the api
 
