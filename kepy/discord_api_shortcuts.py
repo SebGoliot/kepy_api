@@ -25,6 +25,7 @@ def api_get(api_route: str, auth: str = "") -> dict:
     return r.json()
 
 
+# TODO: Test this function and make sure it works as expected (no data sent ?!)
 def api_put(api_route: str, reason: str = "") -> None:
     """Puts an object to the api
 
@@ -97,7 +98,7 @@ def api_get_member(guild_id, member_id) -> dict:
     """Gets an user from the api
 
     Args:
-        user_id (int): The id of the user to retrieve
+        user_id (int): The id of the member to retrieve
 
     Returns:
         dict: The user object

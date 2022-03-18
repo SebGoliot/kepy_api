@@ -16,7 +16,16 @@ interact_bindings = {"Mute author": mute_author}
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
-def interactions(request):
+def interactions(request) -> HttpResponse:
+    """
+    This function handles the Discord interactions and returns an HttpResponse.
+
+    Args:
+        request (HttpRequest): The interaction request
+    
+    Returns:
+        HttpResponse: The returned message
+    """
 
     PING                = "1"
     APPLICATION_COMMAND = "2"
@@ -39,8 +48,8 @@ def interactions(request):
     if interaction_type == PING:
         return JsonResponse(data={"type": 1})
     elif interaction_type == APPLICATION_COMMAND:
-        if int_name := get_interaction_name(data):
-            if interact := interact_bindings.get(int_name):
+        if interaction_name := get_interaction_name(data):
+            if interact := interact_bindings.get(interaction_name):
                 response = interact(data)
                 return JsonResponse(data={"content": response})
 
